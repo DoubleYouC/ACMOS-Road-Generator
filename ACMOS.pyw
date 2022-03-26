@@ -3,10 +3,11 @@
 import tkinter as tk
 import json
 import logging
+import errno
 
 from tkinter import ttk
 from tkinter.filedialog import askdirectory
-from os import listdir, makedirs, remove, walk
+from os import listdir, makedirs, remove, walk, strerror
 from os.path import basename, exists, isdir, join, split
 from glob import glob
 from subprocess import check_call
@@ -15,30 +16,22 @@ from zipfile import ZipFile
 
 from PIL import Image, UnidentifiedImageError
 
-class Lod32:
+class Road:
     def __init__(self, texture, road):
         
-        self.diffuse_texture = smart_image_open(f'{texture}{self.season_suffixes[0]}.dds').convert('RGBA')
-        if self.diffuse_texture.size[0] < 1024:
-            self.diffuse_texture = self.diffuse_texture.resize((1024, 1024), Image.LANCZOS)
-
-        self.normal_texture = smart_image_open(f'{texture}{self.season_suffixes[0]}_n.dds').convert('RGBA')
-        if self.normal_texture.size[0] < 1024:
-            self.normal_texture = self.normal_texture.resize((1024, 1024), Image.LANCZOS)
-              
         if exists(f'{road}.png'):
             road_diffuse_texture = smart_image_open(f'{road}.png').convert('RGBA')
             self.road_diffuse_texture = road_diffuse_texture.resize(self.diffuse_texture.size,
                                                                     Image.LANCZOS)
         else:
             self.road_diffuse_texture = None
-            sm(f'Road diffuse texture does not exist for {texture}')
+            sm(f'Road diffuse texture does not exist for {texture}',0,0)
 
         if exists(f'{road}_d.png'):
             road_diffuse_mask_texture = smart_image_open(f'{self.road}_d.png').convert('RGBA')
         else:
             road_diffuse_mask_texture = smart_image_open('roads\\white.png').convert('RGBA')
-            sm(f'Road diffuse mask texture does not exist for {texture}. Using default white mask.')
+            sm(f'Road diffuse mask texture does not exist for {texture}. Using default white mask.',0,0)
         self.road_diffuse_mask_texture = road_diffuse_mask_texture.resize(self.diffuse_texture.size,
                                                                           Image.LANCZOS)
 
@@ -48,13 +41,13 @@ class Lod32:
                                                                   Image.LANCZOS)
         else:
             self.road_normal_texture = None
-            sm(f'Road normal texture does not exist for {texture}.')
+            sm(f'Road normal texture does not exist for {texture}.',0,0)
 
         if exists(f'{road}_m.png'):
             road_normal_mask_texture = smart_image_open(f'{road}_m.png').convert('RGBA')
         else:
             road_normal_mask_texture = smart_image_open('roads\\white.png').convert('RGBA')
-            sm(f'Road normal mask texture does not exist for {texture}. Using default white mask.')
+            sm(f'Road normal mask texture does not exist for {texture}. Using default white mask.',0,0)
         self.road_normal_mask_texture = road_normal_mask_texture.resize(self.normal_texture.size,
                                                                         Image.LANCZOS)
 
@@ -74,14 +67,29 @@ class Lod32:
                                  mask = self.road_normal_texture)
         return new_normal_texture
 
-class LodSeasons(Lod32):
+class Lod(Road):
     def __init__(self, lod_path, worldspace, lod_position):
         self.texture = f'{lod_path}\\textures\\terrain\\{worldspace}\\{worldspace}.32.{lod_position}'
-        sm(f'texture is {self.texture}')
+        sm(f'Processing {self.texture}')
         self.road = f'roads\\{worldspace}\\{worldspace}.32.{lod_position}'
+        #return a list of seasons found for the current position
         self.season_suffixes = [fp.replace(self.texture, '').replace('_n.dds', '') for fp in glob(f'{self.texture}*_n.dds')]
-        sm(f'seasons are {self.season_suffixes}')
-        Lod32.__init__(self, self.texture, self.road)
+        sm(f'seasons are {self.season_suffixes}',0,0)
+        if '' not in self.season_suffixes:
+            sm(f'No default LOD exists for {worldspace} at {lod_position}. Please generate xLODGen with correct settings.', 1)
+            raise FileNotFoundError(errno.ENOENT, strerror(errno.ENOENT), '{lod_path}\\textures\\terrain\\{worldspace}\\{worldspace}.32.{lod_position}_n.dds')
+
+        self.diffuse_texture = smart_image_open(f'{texture}{self.season_suffixes[0]}.dds').convert('RGBA')
+        if self.diffuse_texture.size[0] < 1024:
+            sm(f'{texture}{self.season_suffixes[0]}.dds was smaller than 1024 resolution, so it will be upscaled.',0,0)
+            self.diffuse_texture = self.diffuse_texture.resize((1024, 1024), Image.LANCZOS)
+
+        self.normal_texture = smart_image_open(f'{texture}{self.season_suffixes[0]}_n.dds').convert('RGBA')
+        if self.normal_texture.size[0] < 1024:
+            sm(f'{texture}{self.season_suffixes[0]}_n.dds was smaller than 1024 resolution, so it will be upscaled.',0,0)
+            self.normal_texture = self.normal_texture.resize((1024, 1024), Image.LANCZOS)
+
+        Road.__init__(self, self.texture, self.road)
 
     def seasonal_diffuse(self, season_suffix):
         seasonal_diffuse_image = smart_image_open(f'{self.texture}{season_suffix}.dds').convert('RGBA')
@@ -194,7 +202,7 @@ def generate(worldspaces, output_path, lod_path, texconv):
         world_dict[f'{n} world'] = World(lod_path, worldspaces[n])
         for coordinates in world_dict[f'{n} world'].lod_coordinates:
             try:
-                world_dict[f'{n} lod'] = LodSeasons(lod_path, worldspaces[n], coordinates)
+                world_dict[f'{n} lod'] = Lod(lod_path, worldspaces[n], coordinates)
             except AttributeError as ae:
                 sm(f'Error: AttributeError processing {worldspaces[n]} at {coordinates}. {ae}', 1)
                 return text['Unsuccessful completion message'][language.get()]
@@ -211,6 +219,10 @@ def generate(worldspaces, output_path, lod_path, texconv):
                     world_dict[f'{n} lod'].new_normal(world_dict[f'{n} lod'].seasonal_normal(season)).save(output_png,'png')
                     sm(f'Processing {output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}_n.dds...')
                     run_texconv([texconv, "-y", "-ft", "DDS", "-f", "BC7_UNORM", "-m", "1", "-bc", "x", "-o", output_dir, output_png], output_png)
+    answer = tk.messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
+    if answer:
+        sm(f'Zipping {lod_path} to {lod_path}\\Terrain LOD.zip')
+        zip_dir(lod_path, f'{lod_path}\\Terrain LOD.zip')
     return text['Successful completion message'][language.get()]
 
 def set_lod_path():

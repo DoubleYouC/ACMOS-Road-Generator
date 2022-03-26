@@ -64,6 +64,14 @@
     "English": "Are you sure you want to overwrite the LOD textures directly? If not, click no and specify a custom Output Path.",
     "Deutsch": "Möchten Sie die LOD-Texturen wirklich direkt überschreiben? Wenn nicht, klicken Sie auf Nein und geben Sie einen benutzerdefinierten Ausgabepfad an."
   },
+  "Zip contents prompt title": {
+    "English": "Zip?",
+    "Deutsch": "Kompresse?"
+  },
+  "Zip contents prompt message": {
+    "English": "Generation complete. Would you like to zip the output for ease of installation?",
+    "Deutsch": "Generierung abgeschlossen. Möchten Sie die Ausgabe zur einfacheren Installation komprimieren?"
+  },
   "Successful completion message": {
     "English": "All Done!",
     "Deutsch": "Alles erledigt!"
