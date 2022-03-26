@@ -7,22 +7,21 @@ import errno
 
 from tkinter import ttk
 from tkinter.filedialog import askdirectory
-from os import listdir, makedirs, remove, walk, strerror
-from os.path import basename, exists, isdir, join, split
+from os import listdir, makedirs, remove, strerror
+from os.path import exists, isdir, join, split
 from shutil import make_archive, move
 from glob import glob
-from subprocess import check_call
+from subprocess import check_call, CalledProcessError
 from datetime import datetime
 
 from PIL import Image, UnidentifiedImageError
 
 class Road:
-    def __init__(self, texture, road):
+    def __init__(self, texture, road, diffuse_size, normal_size):
         #Import any existing road diffuse.
         if exists(f'{road}.png'):
             road_diffuse_texture = smart_image_open(f'{road}.png').convert('RGBA')
-            self.road_diffuse_texture = road_diffuse_texture.resize(self.diffuse_texture.size,
-                                                                    Image.LANCZOS)
+            self.road_diffuse_texture = road_diffuse_texture.resize(diffuse_size, Image.LANCZOS)
         else:
             self.road_diffuse_texture = None
             sm(f'Road diffuse texture does not exist for {texture}',0,0)
@@ -32,13 +31,11 @@ class Road:
         else:
             road_diffuse_mask_texture = smart_image_open('roads\\white.png').convert('RGBA')
             sm(f'Road diffuse mask texture does not exist for {texture}. Using default white mask.',0,0)
-        self.road_diffuse_mask_texture = road_diffuse_mask_texture.resize(self.diffuse_texture.size,
-                                                                          Image.LANCZOS)
+        self.road_diffuse_mask_texture = road_diffuse_mask_texture.resize(diffuse_size, Image.LANCZOS)
         #Import any existing road normal.
         if exists(f'{road}_n.png'):
             road_normal_texture = smart_image_open(f'{road}_n.png').convert('RGBA')
-            self.road_normal_texture = road_normal_texture.resize(self.normal_texture.size,
-                                                                  Image.LANCZOS)
+            self.road_normal_texture = road_normal_texture.resize(normal_size, Image.LANCZOS)
         else:
             self.road_normal_texture = None
             sm(f'Road normal texture does not exist for {texture}.',0,0)
@@ -48,8 +45,7 @@ class Road:
         else:
             road_normal_mask_texture = smart_image_open('roads\\white.png').convert('RGBA')
             sm(f'Road normal mask texture does not exist for {texture}. Using default white mask.',0,0)
-        self.road_normal_mask_texture = road_normal_mask_texture.resize(self.normal_texture.size,
-                                                                        Image.LANCZOS)
+        self.road_normal_mask_texture = road_normal_mask_texture.resize(normal_size, Image.LANCZOS)
 
     def new_diffuse(self, original_diffuse):
         new_diffuse_texture = Image.composite(original_diffuse,
@@ -89,7 +85,7 @@ class Lod(Road):
             sm(f'{self.texture}{self.season_suffixes[0]}_n.dds was smaller than 1024 resolution, so it will be upscaled.',0,0)
             self.normal_texture = self.normal_texture.resize((1024, 1024), Image.LANCZOS)
 
-        Road.__init__(self, self.texture, self.road)
+        Road.__init__(self, self.texture, self.road, self.diffuse_texture.size, self.normal_texture.size)
 
     def seasonal_diffuse(self, season_suffix):
         seasonal_diffuse_image = smart_image_open(f'{self.texture}{season_suffix}.dds').convert('RGBA')
@@ -129,16 +125,16 @@ def smart_image_open(texture):
         sm(f'Error! File Not Found: {texture}. {fnfe}', 1)
     except UnidentifiedImageError:
         #if the file is not able to be read by built-in DDS plugin, convert the file using texconv.
-        return smart_image_open_last(read_texconv(texture), texture)
+        return smart_image_open_last(read_texconv(texture))
     except ValueError as ve:
         sm(f'Error! Value Error: {texture}. {ve}', 1)
     except TypeError as te:
         sm(f'Error! Type Error: {texture}. {te}', 1)
 
-def smart_image_open_last(texture, original_texture):
+def smart_image_open_last(texture):
     #Final attempt to open the texture following conversion through texconv
     try:
-        processed_image = Image.open(texture)
+        return Image.open(texture)
     except FileNotFoundError as fnfe:
         sm(f'Error! File Not Found: {texture}. {fnfe}', 1)
     except UnidentifiedImageError as uie:
@@ -149,9 +145,6 @@ def smart_image_open_last(texture, original_texture):
         sm(f'Error! Type Error: {texture}. {te}', 1)
     except AttributeError as ae:
         sm(f'Error! Attribute Error: {texture}. {ae}', 1)
-    if texture != original_texture and exists(texture):
-        remove(texture)
-    return processed_image
 
 def sm(message, error_message = False, update_status = True):
     #My standard Error message, statusbar update, and logging function
@@ -163,16 +156,13 @@ def sm(message, error_message = False, update_status = True):
         window.update()
 
 def run_texconv(args, input_file):
-    #Converts png file to DDS and removes the temporary png file
+    #Converts png file to DDS
     try:
         arguments = " ".join(["\"" + x + "\"" for x in args])
         sm(f'executing: {arguments}',0,0)
         sm('Saving ' + input_file.replace('.png','.dds'),0,0)
         check_call(args, shell=True)
-        if exists(input_file) and exists(input_file.replace('.png','.dds')):
-            sm(f'Removing {input_file}',0,0)
-            remove(input_file)
-    except Exception as ex:
+    except CalledProcessError as ex:
         sm("Error: " + str(ex), 1)
 
 def read_texconv(input_file):
@@ -180,12 +170,13 @@ def read_texconv(input_file):
     texconv = 'texconv\\texconv.exe'
     try:
         sm(f'Attempting to convert {input_file} with texconv',0,0)
-        directory, filename = split(input_file)
+        filename = split(input_file)[1]
         if not exists(f'{my_app_log_directory}\\tmp'):
             makedirs(f'{my_app_log_directory}\\tmp')
         check_call([texconv, "-y", "-ft", "DDS", "-f", "BC7_UNORM", "-m", "1", "-bc", "x", "-o", f'{my_app_log_directory}\\tmp', input_file], shell=True)
+        temp_file_list.append(f'{my_app_log_directory}\\tmp\\{filename}')
         return f'{my_app_log_directory}\\tmp\\{filename}'
-    except Exception as ex:
+    except CalledProcessError as ex:
         sm("Error: " + str(ex), 1)
 
 def generate(worldspaces, output_path, lod_path, texconv):
@@ -210,18 +201,20 @@ def generate(worldspaces, output_path, lod_path, texconv):
                     output_png = f'{output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}.png'
                     output_dir = f'{output_path}\\textures\\terrain\\{worldspaces[n]}'
                     world_dict[f'{n} lod'].new_diffuse(world_dict[f'{n} lod'].seasonal_diffuse(season)).save(output_png,'png')
+                    temp_file_list.append(output_png)
                     sm(f'Processing {output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}.dds through texconv.',0,0)
                     run_texconv([texconv, "-y", "-ft", "DDS", "-f", "BC7_UNORM", "-m", "1", "-bc", "x", "-o", output_dir, output_png], output_png)
                 if world_dict[f'{n} lod'].road_normal_texture:
                     output_png = f'{output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}_n.png'
                     output_dir = f'{output_path}\\textures\\terrain\\{worldspaces[n]}'
                     world_dict[f'{n} lod'].new_normal(world_dict[f'{n} lod'].seasonal_normal(season)).save(output_png,'png')
+                    temp_file_list.append(output_png)
                     sm(f'Processing {output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}_n.dds through texconv.',0,0)
                     run_texconv([texconv, "-y", "-ft", "DDS", "-f", "BC7_UNORM", "-m", "1", "-bc", "x", "-o", output_dir, output_png], output_png)
     answer = tk.messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
     if answer:
-        sm(f'Zipping {lod_path} to Terrain LOD.zip\nPlease wait...')
-        make_archive('Terrain LOD', 'zip', lod_path)
+        sm(f'Please wait.... Zipping {output_path} to {output_path}\\Terrain LOD.zip')
+        make_archive('Terrain LOD', 'zip', output_path)
         move('Terrain LOD.zip', f'{output_path}\\Terrain LOD.zip')
     return text['Successful completion message'][language.get()]
 
@@ -255,18 +248,22 @@ def set_output_path():
 
 def generate_button():
     #What the generate button does
+    btn_generate['state'] = 'disabled'
     if btn_lod_path['text'] == text['btn_lod_path'][language.get()]:
         sm(text['LOD path not set message'][language.get()])
         btn_generate['text'] = text['LOD path not set message'][language.get()]
+        btn_generate['state'] = 'normal'
         return
     if btn_output_path['text'] == text['btn_output_path'][language.get()]:
         sm(text['Output path not set message'][language.get()])
         btn_generate['text'] = text['Output path not set message'][language.get()]
+        btn_generate['state'] = 'normal'
         return
     if btn_output_path['text'] == btn_lod_path['text']:
         answer = tk.messagebox.askyesno(text['Overwrite LOD Textures prompt title'][language.get()],text['Overwrite LOD Textures prompt message'][language.get()])
         if not answer:
             set_output_path()
+            btn_generate['state'] = 'normal'
             return
     btn_generate['text'] = text['Please wait message'][language.get()]
     window.update()
@@ -279,22 +276,33 @@ def generate_button():
         output_path = btn_output_path['text'].replace('/','\\')
         sm(f'Output Path set to {output_path}')
         texconv = 'texconv\\texconv.exe'
-        sm(f'Texconv Path set to {texconv}')
+        sm(f'Texconv Path set to {texconv}',0,0)
         road_worldspaces = [f.lower() for f in listdir(road_path) if isdir(join(road_path, f))]
-        sm(f'road_worldspaces: {road_worldspaces}')
+        sm(f'road_worldspaces: {road_worldspaces}',0,0)
         worldspaces = [f.lower() for f in listdir(lod_path_terrain) if isdir(join(lod_path_terrain, f)) and f.lower() in road_worldspaces]
-        sm(f'worldspaces: {worldspaces}')
+        sm(f'worldspaces: {worldspaces}',0,0)
 
         #### TEMPORARY OVERRIDE ####
         #worldspaces = ['blackreach']
         ############################
-
+        
         message = generate(worldspaces, output_path, lod_path, texconv)
+        #remove temporary files
+        sm('Removing temporary files...')
+        sm(temp_file_list,0,0)
+        for file in temp_file_list:
+            try:
+                remove(file)
+            except OSError as ex:
+                sm(f'Error: {ex}', 1)
+        #send all done message
         sm(message)
         btn_generate['text'] = text['btn_generate'][language.get()]
         tk.messagebox.showinfo(message, message)
+        btn_generate['state'] = 'normal'
     else:
         sm(text['Invalid LOD path message'][language.get()])
+        btn_generate['state'] = 'normal'
 
 def change_language(lingo):
     #Language handling
@@ -316,6 +324,9 @@ if __name__ == '__main__':
     logging.basicConfig(filename=my_app_log, filemode='w',
                         format='%(asctime)s - %(levelname)s - %(message)s',
                         level=logging.DEBUG)
+
+    #Temp file list
+    temp_file_list = []
 
     #translation json
     with open('translate.json') as translate_json:
