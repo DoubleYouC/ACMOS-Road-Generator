@@ -114,6 +114,7 @@
     <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.0.-32_n.png" />
     <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.0.0.png" />
     <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.0.0_n.png" />
+    <Content Include="translate.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="roads" />
