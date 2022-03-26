@@ -329,7 +329,7 @@ if __name__ == '__main__':
     temp_file_list = []
 
     #translation json
-    with open('translate.json') as translate_json:
+    with open('translate.json', encoding='utf-8') as translate_json:
         text = json.load(translate_json)
 
     #Create base app window
