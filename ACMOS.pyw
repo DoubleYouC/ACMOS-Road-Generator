@@ -153,7 +153,7 @@ def sm(message, error_message = False, update_status = True):
         tk.messagebox.showerror('Error', message)
     if update_status:
         statusbar['text'] = message
-        window.update()
+    window.update()
 
 def run_texconv(args, input_file):
     #Converts png file to DDS
@@ -182,7 +182,7 @@ def read_texconv(input_file):
 def generate(worldspaces, output_path, lod_path, texconv):
     #Generate roads
     world_dict = {}
-
+    progress_bar.start()
     for n in range(len(worldspaces)):
         if not exists(f'{output_path}\\textures\\terrain\\{worldspaces[n]}'):
             makedirs(f'{output_path}\\textures\\terrain\\{worldspaces[n]}')
@@ -211,11 +211,22 @@ def generate(worldspaces, output_path, lod_path, texconv):
                     temp_file_list.append(output_png)
                     sm(f'Processing {output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}_n.dds through texconv.',0,0)
                     run_texconv([texconv, "-y", "-ft", "DDS", "-f", "BC7_UNORM", "-m", "1", "-bc", "x", "-o", output_dir, output_png], output_png)
+    #remove temporary files
+    sm('Removing temporary files...')
+    sm(temp_file_list,0,0)
+    for file in temp_file_list:
+        if exists(file):
+            try:
+                remove(file)
+            except OSError as ex:
+                sm(f'Error: OSError removing {file}: {ex}')
+    sm(text['Zip contents prompt title'][language.get()])
     answer = tk.messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
     if answer:
-        sm(f'Please wait.... Zipping {output_path} to {output_path}\\Terrain LOD.zip')
+        sm(f'Please wait... This could take a while... Zipping {output_path} to {output_path}\\Terrain LOD.zip')
         make_archive('Terrain LOD', 'zip', output_path)
         move('Terrain LOD.zip', f'{output_path}\\Terrain LOD.zip')
+    progress_bar.stop()
     return text['Successful completion message'][language.get()]
 
 def set_lod_path():
@@ -287,15 +298,6 @@ def generate_button():
         ############################
         
         message = generate(worldspaces, output_path, lod_path, texconv)
-        #remove temporary files
-        sm('Removing temporary files...')
-        sm(temp_file_list,0,0)
-        for file in temp_file_list:
-            if exists(file):
-                try:
-                    remove(file)
-                except OSError as ex:
-                    sm(f'Error: OSError removing {file}: {ex}')
         #send all done message
         sm(message)
         btn_generate['text'] = text['btn_generate'][language.get()]
@@ -370,6 +372,10 @@ if __name__ == '__main__':
     #Statusbar
     statusbar = tk.Label(frame_generate, text='', bd=1, relief=tk.SUNKEN, anchor=tk.W, wraplength=500)
     statusbar.pack(side=tk.BOTTOM, padx=3, fill=tk.X)
+
+    #Progressbar
+    progress_bar = ttk.Progressbar(frame_generate, orient=tk.HORIZONTAL, length=100, mode='determinate')
+    progress_bar.pack(side=tk.BOTTOM, padx=3, fill=tk.X)
 
     #Pack frames
     frame_lod.pack()
