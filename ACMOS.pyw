@@ -18,7 +18,7 @@ from PIL import Image, UnidentifiedImageError
 
 class Road:
     def __init__(self, texture, road):
-        
+        #Import any existing road diffuse.
         if exists(f'{road}.png'):
             road_diffuse_texture = smart_image_open(f'{road}.png').convert('RGBA')
             self.road_diffuse_texture = road_diffuse_texture.resize(self.diffuse_texture.size,
@@ -26,7 +26,7 @@ class Road:
         else:
             self.road_diffuse_texture = None
             sm(f'Road diffuse texture does not exist for {texture}',0,0)
-
+        #Import any existing road diffuse mask.
         if exists(f'{road}_d.png'):
             road_diffuse_mask_texture = smart_image_open(f'{self.road}_d.png').convert('RGBA')
         else:
@@ -34,7 +34,7 @@ class Road:
             sm(f'Road diffuse mask texture does not exist for {texture}. Using default white mask.',0,0)
         self.road_diffuse_mask_texture = road_diffuse_mask_texture.resize(self.diffuse_texture.size,
                                                                           Image.LANCZOS)
-
+        #Import any existing road normal.
         if exists(f'{road}_n.png'):
             road_normal_texture = smart_image_open(f'{road}_n.png').convert('RGBA')
             self.road_normal_texture = road_normal_texture.resize(self.normal_texture.size,
@@ -42,7 +42,7 @@ class Road:
         else:
             self.road_normal_texture = None
             sm(f'Road normal texture does not exist for {texture}.',0,0)
-
+        #Import any existing road normal mask.
         if exists(f'{road}_m.png'):
             road_normal_mask_texture = smart_image_open(f'{road}_m.png').convert('RGBA')
         else:
@@ -79,14 +79,14 @@ class Lod(Road):
             sm(f'No default LOD exists for {worldspace} at {lod_position}. Please generate xLODGen with correct settings.', 1)
             raise FileNotFoundError(errno.ENOENT, strerror(errno.ENOENT), '{lod_path}\\textures\\terrain\\{worldspace}\\{worldspace}.32.{lod_position}_n.dds')
 
-        self.diffuse_texture = smart_image_open(f'{texture}{self.season_suffixes[0]}.dds').convert('RGBA')
+        self.diffuse_texture = smart_image_open(f'{self.texture}{self.season_suffixes[0]}.dds').convert('RGBA')
         if self.diffuse_texture.size[0] < 1024:
-            sm(f'{texture}{self.season_suffixes[0]}.dds was smaller than 1024 resolution, so it will be upscaled.',0,0)
+            sm(f'{self.texture}{self.season_suffixes[0]}.dds was smaller than 1024 resolution, so it will be upscaled.',0,0)
             self.diffuse_texture = self.diffuse_texture.resize((1024, 1024), Image.LANCZOS)
 
-        self.normal_texture = smart_image_open(f'{texture}{self.season_suffixes[0]}_n.dds').convert('RGBA')
+        self.normal_texture = smart_image_open(f'{self.texture}{self.season_suffixes[0]}_n.dds').convert('RGBA')
         if self.normal_texture.size[0] < 1024:
-            sm(f'{texture}{self.season_suffixes[0]}_n.dds was smaller than 1024 resolution, so it will be upscaled.',0,0)
+            sm(f'{self.texture}{self.season_suffixes[0]}_n.dds was smaller than 1024 resolution, so it will be upscaled.',0,0)
             self.normal_texture = self.normal_texture.resize((1024, 1024), Image.LANCZOS)
 
         Road.__init__(self, self.texture, self.road)
@@ -205,6 +205,9 @@ def generate(worldspaces, output_path, lod_path, texconv):
                 world_dict[f'{n} lod'] = Lod(lod_path, worldspaces[n], coordinates)
             except AttributeError as ae:
                 sm(f'Error: AttributeError processing {worldspaces[n]} at {coordinates}. {ae}', 1)
+                return text['Unsuccessful completion message'][language.get()]
+            except FileNotFoundError as fnfe:
+                sm(f'Error: FileNotFoundError processing {worldspaces[n]} at {coordinates}. {fnfe}', 1)
                 return text['Unsuccessful completion message'][language.get()]
             for season in world_dict[f'{n} lod'].season_suffixes:
                 if world_dict[f'{n} lod'].road_diffuse_texture:
