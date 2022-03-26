@@ -1,1 +1,0 @@
-pyinstaller ACMOS_onefile.spec
