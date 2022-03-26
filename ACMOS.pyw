@@ -1,12 +1,15 @@
+'''ACMOS Road Generator'''
+
 import tkinter as tk
-import tempfile, json, logging
+import json
+import logging
 
 from tkinter import ttk
+from tkinter.filedialog import askdirectory
 from os import listdir, makedirs, remove, walk
 from os.path import basename, exists, isdir, join, split
 from glob import glob
 from subprocess import check_call
-from tkinter.filedialog import askdirectory
 from datetime import datetime
 from zipfile import ZipFile
 
@@ -111,13 +114,13 @@ class World:
         sm(f'coordinates: {coordinates}')
 
 
-def zip_dir(dir_name, zip):
+def zip_dir(dir_name, zip_file):
     # Zips the files in directory
-    with ZipFile(zip, 'w') as zip_object:
+    with ZipFile(zip_file, 'w') as zip_object:
         for directory, subdirectories, files in walk(dir_name):
             for file in files:
                 # Recreate path of the file in the zip
-                file_path = os.path.join(directory, file)
+                file_path = join(directory, file)
                 # Add file to zip
                 zip_object.write(file_path, basename(file_path))
 
@@ -283,6 +286,7 @@ def generate_button():
 
 def change_language(lingo):
     #Language handling
+    sm(f'Using {lingo}.', update_status = False)
     window.wm_title(text['title'][language.get()])
     lbl_lod_path_label['text'] = text['lbl_lod_path_label'][language.get()]
     btn_lod_path['text'] = text['btn_lod_path'][language.get()]
