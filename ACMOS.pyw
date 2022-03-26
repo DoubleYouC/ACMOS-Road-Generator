@@ -73,7 +73,9 @@ class Lod(Road):
         sm(f'seasons are {self.season_suffixes}',0,0)
         if '' not in self.season_suffixes:
             sm(f'No default LOD exists for {worldspace} at {lod_position}. Please generate xLODGen with correct settings.', 1)
-            raise FileNotFoundError(errno.ENOENT, strerror(errno.ENOENT), '{lod_path}\\textures\\terrain\\{worldspace}\\{worldspace}.32.{lod_position}_n.dds')
+            raise FileNotFoundError(errno.ENOENT,
+                                    strerror(errno.ENOENT),
+                                    '{lod_path}\\textures\\terrain\\{worldspace}\\{worldspace}.32.{lod_position}_n.dds')
 
         self.diffuse_texture = smart_image_open(f'{self.texture}{self.season_suffixes[0]}.dds').convert('RGBA')
         if self.diffuse_texture.size[0] < 1024:
@@ -316,7 +318,7 @@ def change_language(lingo):
     lbl_output_path_label['text'] = text['lbl_output_path_label'][language.get()]
     btn_output_path['text'] = text['btn_output_path'][language.get()]
     btn_generate['text'] = text['btn_generate'][language.get()]
-    
+
 if __name__ == '__main__':
     #Make logs.
     today = datetime.now()
