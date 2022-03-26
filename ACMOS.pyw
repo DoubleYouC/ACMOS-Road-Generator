@@ -9,10 +9,10 @@ from tkinter import ttk
 from tkinter.filedialog import askdirectory
 from os import listdir, makedirs, remove, walk, strerror
 from os.path import basename, exists, isdir, join, split
+from shutil import make_archive, move
 from glob import glob
 from subprocess import check_call
 from datetime import datetime
-from zipfile import ZipFile
 
 from PIL import Image, UnidentifiedImageError
 
@@ -121,17 +121,6 @@ class World:
         self.lod_coordinates = coordinates
         sm(f'coordinates: {coordinates}')
 
-
-def zip_dir(dir_name, zip_file):
-    # Zips the files in directory
-    with ZipFile(zip_file, 'w') as zip_object:
-        for directory, subdirectories, files in walk(dir_name):
-            for file in files:
-                # Recreate path of the file in the zip
-                file_path = join(directory, file)
-                # Add file to zip
-                zip_object.write(file_path, basename(file_path))
-
 def smart_image_open(texture):
     #First attempt to open the texture
     try:
@@ -140,17 +129,16 @@ def smart_image_open(texture):
         sm(f'Error! File Not Found: {texture}. {fnfe}', 1)
     except UnidentifiedImageError:
         #if the file is not able to be read by built-in DDS plugin, convert the file using texconv.
-        read_texconv(texture)
-        return smart_image_open_last(texture)
+        return smart_image_open_last(read_texconv(texture), texture)
     except ValueError as ve:
         sm(f'Error! Value Error: {texture}. {ve}', 1)
     except TypeError as te:
         sm(f'Error! Type Error: {texture}. {te}', 1)
 
-def smart_image_open_last(texture):
+def smart_image_open_last(texture, original_texture):
     #Final attempt to open the texture following conversion through texconv
     try:
-        return Image.open(texture)
+        processed_image = Image.open(texture)
     except FileNotFoundError as fnfe:
         sm(f'Error! File Not Found: {texture}. {fnfe}', 1)
     except UnidentifiedImageError as uie:
@@ -159,6 +147,11 @@ def smart_image_open_last(texture):
         sm(f'Error! Value Error: {texture}. {ve}', 1)
     except TypeError as te:
         sm(f'Error! Type Error: {texture}. {te}', 1)
+    except AttributeError as ae:
+        sm(f'Error! Attribute Error: {texture}. {ae}', 1)
+    if texture != original_texture and exists(texture):
+        remove(texture)
+    return processed_image
 
 def sm(message, error_message = False, update_status = True):
     #My standard Error message, statusbar update, and logging function
@@ -173,11 +166,11 @@ def run_texconv(args, input_file):
     #Converts png file to DDS and removes the temporary png file
     try:
         arguments = " ".join(["\"" + x + "\"" for x in args])
-        sm(f'executing: {arguments}')
-        sm('Saving ' + input_file.replace('.png','.dds'))
+        sm(f'executing: {arguments}',0,0)
+        sm('Saving ' + input_file.replace('.png','.dds'),0,0)
         check_call(args, shell=True)
         if exists(input_file) and exists(input_file.replace('.png','.dds')):
-            sm(f'Removing {input_file}')
+            sm(f'Removing {input_file}',0,0)
             remove(input_file)
     except Exception as ex:
         sm("Error: " + str(ex), 1)
@@ -186,9 +179,12 @@ def read_texconv(input_file):
     #Attemps to convert with texconv
     texconv = 'texconv\\texconv.exe'
     try:
-        sm(f'Attempting to convert {input_file} with texconv')
+        sm(f'Attempting to convert {input_file} with texconv',0,0)
         directory, filename = split(input_file)
-        check_call([texconv, "-y", "-ft", "DDS", "-f", "BC7_UNORM", "-m", "1", "-bc", "x", "-o", directory, input_file], shell=True)
+        if not exists(f'{my_app_log_directory}\\tmp'):
+            makedirs(f'{my_app_log_directory}\\tmp')
+        check_call([texconv, "-y", "-ft", "DDS", "-f", "BC7_UNORM", "-m", "1", "-bc", "x", "-o", f'{my_app_log_directory}\\tmp', input_file], shell=True)
+        return f'{my_app_log_directory}\\tmp\\{filename}'
     except Exception as ex:
         sm("Error: " + str(ex), 1)
 
@@ -214,18 +210,19 @@ def generate(worldspaces, output_path, lod_path, texconv):
                     output_png = f'{output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}.png'
                     output_dir = f'{output_path}\\textures\\terrain\\{worldspaces[n]}'
                     world_dict[f'{n} lod'].new_diffuse(world_dict[f'{n} lod'].seasonal_diffuse(season)).save(output_png,'png')
-                    sm(f'Processing {output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}.dds...')
+                    sm(f'Processing {output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}.dds through texconv.',0,0)
                     run_texconv([texconv, "-y", "-ft", "DDS", "-f", "BC7_UNORM", "-m", "1", "-bc", "x", "-o", output_dir, output_png], output_png)
                 if world_dict[f'{n} lod'].road_normal_texture:
                     output_png = f'{output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}_n.png'
                     output_dir = f'{output_path}\\textures\\terrain\\{worldspaces[n]}'
                     world_dict[f'{n} lod'].new_normal(world_dict[f'{n} lod'].seasonal_normal(season)).save(output_png,'png')
-                    sm(f'Processing {output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}_n.dds...')
+                    sm(f'Processing {output_path}\\textures\\terrain\\{worldspaces[n]}\\{worldspaces[n]}.32.{coordinates}{season}_n.dds through texconv.',0,0)
                     run_texconv([texconv, "-y", "-ft", "DDS", "-f", "BC7_UNORM", "-m", "1", "-bc", "x", "-o", output_dir, output_png], output_png)
     answer = tk.messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
     if answer:
-        sm(f'Zipping {lod_path} to {lod_path}\\Terrain LOD.zip')
-        zip_dir(lod_path, f'{lod_path}\\Terrain LOD.zip')
+        sm(f'Zipping {lod_path} to Terrain LOD.zip\nPlease wait...')
+        make_archive('Terrain LOD', 'zip', lod_path)
+        move('Terrain LOD.zip', f'{output_path}\\Terrain LOD.zip')
     return text['Successful completion message'][language.get()]
 
 def set_lod_path():
