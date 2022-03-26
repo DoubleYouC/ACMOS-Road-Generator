@@ -291,10 +291,11 @@ def generate_button():
         sm('Removing temporary files...')
         sm(temp_file_list,0,0)
         for file in temp_file_list:
-            try:
-                remove(file)
-            except OSError as ex:
-                sm(f'Error: {ex}', 1)
+            if exists(file):
+                try:
+                    remove(file)
+                except OSError as ex:
+                    sm(f'Error: OSError removing {file}: {ex}')
         #send all done message
         sm(message)
         btn_generate['text'] = text['btn_generate'][language.get()]
