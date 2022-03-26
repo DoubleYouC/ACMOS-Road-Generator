@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{bd29fdb9-c65f-4567-8caf-f3cca303c61d}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>ACMOS.pyw</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+    <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ACMOS.pyw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="build\ACMOS_onefile\warn-ACMOS_onefile.txt" />
+    <Content Include="build\ACMOS_onefile\xref-ACMOS_onefile.html" />
+    <Content Include="dist\Icon.ico" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.-32.-32.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.-32.-32_n.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.-32.-64.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.-32.-64_n.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.-32.0.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.-32.0_n.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.0.-32.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.0.-32_n.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.0.-64.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.0.-64_n.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.0.0.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.0.0_n.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.32.-32.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.32.-32_n.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.32.-64.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.32.-64_n.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.32.0.png" />
+    <Content Include="dist\roads\arnimaduplicate003\arnimaduplicate003.32.32.0_n.png" />
+    <Content Include="dist\roads\blackreach\blackreach.32.-23.-9.png" />
+    <Content Include="dist\roads\blackreach\blackreach.32.-23.-9_d.png" />
+    <Content Include="dist\roads\blackreach\blackreach.32.-23.-9_m.png" />
+    <Content Include="dist\roads\blackreach\blackreach.32.-23.-9_n.png" />
+    <Content Include="dist\roads\bsheartland\bsheartland.32.0.32.png" />
+    <Content Include="dist\roads\bsheartland\bsheartland.32.0.32_n.png" />
+    <Content Include="dist\roads\bsheartland\bsheartland.32.32.32.png" />
+    <Content Include="dist\roads\bsheartland\bsheartland.32.32.32_n.png" />
+    <Content Include="dist\roads\dlc01falmervalley\dlc01falmervalley.32.-16.-13.png" />
+    <Content Include="dist\roads\dlc01falmervalley\dlc01falmervalley.32.-16.-13_n.png" />
+    <Content Include="dist\roads\dlc01soulcairn\dlc01soulcairn.32.-20.-19.png" />
+    <Content Include="dist\roads\dlc01soulcairn\dlc01soulcairn.32.-20.-19_n.png" />
+    <Content Include="dist\roads\dlc2solstheimworld\dlc2solstheimworld.32.0.0.png" />
+    <Content Include="dist\roads\dlc2solstheimworld\dlc2solstheimworld.32.0.0_n.png" />
+    <Content Include="dist\roads\falskaar\falskaar.32.-32.-32.png" />
+    <Content Include="dist\roads\falskaar\falskaar.32.-32.-32_n.png" />
+    <Content Include="dist\roads\falskaar\falskaar.32.0.-32.png" />
+    <Content Include="dist\roads\falskaar\falskaar.32.0.-32_n.png" />
+    <Content Include="dist\roads\lastendell\lastendell.32.-32.-32.png" />
+    <Content Include="dist\roads\lastendell\lastendell.32.-32.-32_n.png" />
+    <Content Include="dist\roads\lastendell\lastendell.32.-32.0.png" />
+    <Content Include="dist\roads\lastendell\lastendell.32.-32.0_n.png" />
+    <Content Include="dist\roads\lastendell\lastendell.32.0.-32.png" />
+    <Content Include="dist\roads\lastendell\lastendell.32.0.-32_n.png" />
+    <Content Include="dist\roads\lastendell\lastendell.32.0.0.png" />
+    <Content Include="dist\roads\lastendell\lastendell.32.0.0_n.png" />
+    <Content Include="dist\roads\midwoodisle\midwoodisle.32.-32.-32.png" />
+    <Content Include="dist\roads\midwoodisle\midwoodisle.32.-32.-32_n.png" />
+    <Content Include="dist\roads\midwoodisle\midwoodisle.32.-32.0.png" />
+    <Content Include="dist\roads\midwoodisle\midwoodisle.32.-32.0_n.png" />
+    <Content Include="dist\roads\midwoodisle\midwoodisle.32.0.-32.png" />
+    <Content Include="dist\roads\midwoodisle\midwoodisle.32.0.-32_n.png" />
+    <Content Include="dist\roads\skuldafnworld\skuldafnworld.32.32.-21.png" />
+    <Content Include="dist\roads\skuldafnworld\skuldafnworld.32.32.-21_n.png" />
+    <Content Include="dist\roads\sovngarde\sovngarde.32.8.0.png" />
+    <Content Include="dist\roads\sovngarde\sovngarde.32.8.0_n.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-32.-32.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-32.-32_n.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-32.0.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-32.0_n.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-32.32.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-32.32_n.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-64.-32.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-64.-32_n.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-64.0.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.-64.0_n.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.0.-32.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.0.-32_n.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.0.0.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.0.0_n.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.32.-32.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.32.-32_n.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.32.0.png" />
+    <Content Include="dist\roads\tamriel\tamriel.32.32.0_n.png" />
+    <Content Include="dist\roads\vominheim\vominheim.32.-32.-32.png" />
+    <Content Include="dist\roads\vominheim\vominheim.32.-32.-32_n.png" />
+    <Content Include="dist\roads\vominheim\vominheim.32.-32.0.png" />
+    <Content Include="dist\roads\vominheim\vominheim.32.-32.0_n.png" />
+    <Content Include="dist\roads\vominheim\vominheim.32.0.-32.png" />
+    <Content Include="dist\roads\vominheim\vominheim.32.0.-32_n.png" />
+    <Content Include="dist\roads\vominheim\vominheim.32.0.0.png" />
+    <Content Include="dist\roads\vominheim\vominheim.32.0.0_n.png" />
+    <Content Include="dist\roads\white.png" />
+    <Content Include="dist\roads\wyrmstoothworld\wyrmstoothworld.32.-32.-32.png" />
+    <Content Include="dist\roads\wyrmstoothworld\wyrmstoothworld.32.-32.-32_n.png" />
+    <Content Include="dist\roads\wyrmstoothworld\wyrmstoothworld.32.-32.0.png" />
+    <Content Include="dist\roads\wyrmstoothworld\wyrmstoothworld.32.-32.0_n.png" />
+    <Content Include="dist\roads\wyrmstoothworld\wyrmstoothworld.32.0.-32.png" />
+    <Content Include="dist\roads\wyrmstoothworld\wyrmstoothworld.32.0.-32_n.png" />
+    <Content Include="dist\roads\wyrmstoothworld\wyrmstoothworld.32.0.0.png" />
+    <Content Include="dist\roads\wyrmstoothworld\wyrmstoothworld.32.0.0_n.png" />
+    <Content Include="Icon.ico" />
+    <Content Include="requirements.txt" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.-32.-32.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.-32.-32_n.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.-32.-64.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.-32.-64_n.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.-32.0.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.-32.0_n.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.0.-32.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.0.-32_n.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.0.-64.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.0.-64_n.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.0.0.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.0.0_n.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.32.-32.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.32.-32_n.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.32.-64.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.32.-64_n.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.32.0.png" />
+    <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.32.0_n.png" />
+    <Content Include="roads\blackreach\blackreach.32.-23.-9.png" />
+    <Content Include="roads\blackreach\blackreach.32.-23.-9_d.png" />
+    <Content Include="roads\blackreach\blackreach.32.-23.-9_m.png" />
+    <Content Include="roads\blackreach\blackreach.32.-23.-9_n.png" />
+    <Content Include="roads\bsheartland\bsheartland.32.0.32.png" />
+    <Content Include="roads\bsheartland\bsheartland.32.0.32_n.png" />
+    <Content Include="roads\bsheartland\bsheartland.32.32.32.png" />
+    <Content Include="roads\bsheartland\bsheartland.32.32.32_n.png" />
+    <Content Include="roads\dlc01falmervalley\dlc01falmervalley.32.-16.-13.png" />
+    <Content Include="roads\dlc01falmervalley\dlc01falmervalley.32.-16.-13_n.png" />
+    <Content Include="roads\dlc01soulcairn\dlc01soulcairn.32.-20.-19.png" />
+    <Content Include="roads\dlc01soulcairn\dlc01soulcairn.32.-20.-19_n.png" />
+    <Content Include="roads\dlc2solstheimworld\dlc2solstheimworld.32.0.0.png" />
+    <Content Include="roads\dlc2solstheimworld\dlc2solstheimworld.32.0.0_n.png" />
+    <Content Include="roads\falskaar\falskaar.32.-32.-32.png" />
+    <Content Include="roads\falskaar\falskaar.32.-32.-32_n.png" />
+    <Content Include="roads\falskaar\falskaar.32.0.-32.png" />
+    <Content Include="roads\falskaar\falskaar.32.0.-32_n.png" />
+    <Content Include="roads\lastendell\lastendell.32.-32.-32.png" />
+    <Content Include="roads\lastendell\lastendell.32.-32.-32_n.png" />
+    <Content Include="roads\lastendell\lastendell.32.-32.0.png" />
+    <Content Include="roads\lastendell\lastendell.32.-32.0_n.png" />
+    <Content Include="roads\lastendell\lastendell.32.0.-32.png" />
+    <Content Include="roads\lastendell\lastendell.32.0.-32_n.png" />
+    <Content Include="roads\lastendell\lastendell.32.0.0.png" />
+    <Content Include="roads\lastendell\lastendell.32.0.0_n.png" />
+    <Content Include="roads\midwoodisle\midwoodisle.32.-32.-32.png" />
+    <Content Include="roads\midwoodisle\midwoodisle.32.-32.-32_n.png" />
+    <Content Include="roads\midwoodisle\midwoodisle.32.-32.0.png" />
+    <Content Include="roads\midwoodisle\midwoodisle.32.-32.0_n.png" />
+    <Content Include="roads\midwoodisle\midwoodisle.32.0.-32.png" />
+    <Content Include="roads\midwoodisle\midwoodisle.32.0.-32_n.png" />
+    <Content Include="roads\skuldafnworld\skuldafnworld.32.32.-21.png" />
+    <Content Include="roads\skuldafnworld\skuldafnworld.32.32.-21_n.png" />
+    <Content Include="roads\sovngarde\sovngarde.32.8.0.png" />
+    <Content Include="roads\sovngarde\sovngarde.32.8.0_n.png" />
+    <Content Include="roads\tamriel\tamriel.32.-32.-32.png" />
+    <Content Include="roads\tamriel\tamriel.32.-32.-32_n.png" />
+    <Content Include="roads\tamriel\tamriel.32.-32.0.png" />
+    <Content Include="roads\tamriel\tamriel.32.-32.0_n.png" />
+    <Content Include="roads\tamriel\tamriel.32.-32.32.png" />
+    <Content Include="roads\tamriel\tamriel.32.-32.32_n.png" />
+    <Content Include="roads\tamriel\tamriel.32.-64.-32.png" />
+    <Content Include="roads\tamriel\tamriel.32.-64.-32_n.png" />
+    <Content Include="roads\tamriel\tamriel.32.-64.0.png" />
+    <Content Include="roads\tamriel\tamriel.32.-64.0_n.png" />
+    <Content Include="roads\tamriel\tamriel.32.0.-32.png" />
+    <Content Include="roads\tamriel\tamriel.32.0.-32_n.png" />
+    <Content Include="roads\tamriel\tamriel.32.0.0.png" />
+    <Content Include="roads\tamriel\tamriel.32.0.0_n.png" />
+    <Content Include="roads\tamriel\tamriel.32.32.-32.png" />
+    <Content Include="roads\tamriel\tamriel.32.32.-32_n.png" />
+    <Content Include="roads\tamriel\tamriel.32.32.0.png" />
+    <Content Include="roads\tamriel\tamriel.32.32.0_n.png" />
+    <Content Include="roads\vominheim\vominheim.32.-32.-32.png" />
+    <Content Include="roads\vominheim\vominheim.32.-32.-32_n.png" />
+    <Content Include="roads\vominheim\vominheim.32.-32.0.png" />
+    <Content Include="roads\vominheim\vominheim.32.-32.0_n.png" />
+    <Content Include="roads\vominheim\vominheim.32.0.-32.png" />
+    <Content Include="roads\vominheim\vominheim.32.0.-32_n.png" />
+    <Content Include="roads\vominheim\vominheim.32.0.0.png" />
+    <Content Include="roads\vominheim\vominheim.32.0.0_n.png" />
+    <Content Include="roads\white.png" />
+    <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.-32.-32.png" />
+    <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.-32.-32_n.png" />
+    <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.-32.0.png" />
+    <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.-32.0_n.png" />
+    <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.0.-32.png" />
+    <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.0.-32_n.png" />
+    <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.0.0.png" />
+    <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.0.0_n.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="build\" />
+    <Folder Include="build\ACMOS_onefile" />
+    <Folder Include="dist" />
+    <Folder Include="dist\roads" />
+    <Folder Include="dist\roads\arnimaduplicate003" />
+    <Folder Include="dist\roads\blackreach" />
+    <Folder Include="dist\roads\bsheartland" />
+    <Folder Include="dist\roads\dlc01falmervalley" />
+    <Folder Include="dist\roads\dlc01soulcairn" />
+    <Folder Include="dist\roads\dlc2solstheimworld" />
+    <Folder Include="dist\roads\falskaar" />
+    <Folder Include="dist\roads\lastendell" />
+    <Folder Include="dist\roads\midwoodisle" />
+    <Folder Include="dist\roads\skuldafnworld" />
+    <Folder Include="dist\roads\sovngarde" />
+    <Folder Include="dist\roads\tamriel" />
+    <Folder Include="dist\roads\vominheim" />
+    <Folder Include="dist\roads\wyrmstoothworld" />
+    <Folder Include="roads" />
+    <Folder Include="roads\arnimaduplicate003" />
+    <Folder Include="roads\blackreach" />
+    <Folder Include="roads\bsheartland" />
+    <Folder Include="roads\dlc01falmervalley" />
+    <Folder Include="roads\dlc01soulcairn" />
+    <Folder Include="roads\dlc2solstheimworld" />
+    <Folder Include="roads\falskaar" />
+    <Folder Include="roads\lastendell" />
+    <Folder Include="roads\midwoodisle" />
+    <Folder Include="roads\skuldafnworld" />
+    <Folder Include="roads\sovngarde" />
+    <Folder Include="roads\tamriel" />
+    <Folder Include="roads\vominheim" />
+    <Folder Include="roads\wyrmstoothworld" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>

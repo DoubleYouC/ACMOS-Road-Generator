@@ -1,0 +1,75 @@
+{
+  "languages": [ "English", "Deutsch" ],
+  "title": {
+    "English": "ACMOS Road Generator",
+    "Deutsch": "ACMOS Straßengenerator"
+  },
+  "lbl_lod_path_label": {
+    "English": "Path to LOD:",
+    "Deutsch": "Weg nach LOD:"
+  },
+  "btn_lod_path": {
+    "English": "Browse...",
+    "Deutsch": "Durchsuche..."
+  },
+  "Select LOD Path window": {
+    "English": "Please select the folder containing the unmodified terrain LOD...",
+    "Deutsch": "Bitte wählen Sie den Ordner mit dem unveränderten Gelände aus..."
+  },
+  "LOD path not set message": {
+    "English": "Please specify an LOD Path.",
+    "Deutsch": "Bitte geben Sie einen LOD-Pfad an."
+  },
+  "Invalid LOD path message": {
+    "English": "Invalid Path to LOD... Please set the Path to LOD first!",
+    "Deutsch": "Ungültiger Pfad zu LOD... Bitte setzen Sie den Pfad zuerst auf LOD!"
+  },
+  "textures terrain in path prompt title": {
+    "English": "Remove \\textures\\terrain from selected path?",
+    "Deutsch": "\\textures\\terrain vom ausgewählten Pfad entfernen?"
+  },
+  "textures terrain in path prompt message": {
+    "English": "The path has \\textures\\terrain in it. This path structure is assumed for terrain LOD and should be omitted. I can automatically correct this for you. Accept this correction?",
+    "Deutsch": "Der Pfad enthält \\textures\\terrain. Diese Pfadstruktur wird für die Terrain-LOD angenommen und sollte weggelassen werden. Ich kann dies automatisch für Sie korrigieren. Akzeptieren Sie diese Korrektur?"
+  },
+  "lbl_output_path_label": {
+    "English": "Output Path:",
+    "Deutsch": "Ausgangspfad:"
+  },
+  "btn_output_path": {
+    "English": "Browse...",
+    "Deutsch": "Durchsuche..."
+  },
+  "Select Output Path window": {
+    "English": "Please choose an Output folder...",
+    "Deutsch": "Bitte wählen Sie einen Ausgabeordner..."
+  },
+  "Output path not set message": {
+    "English": "Please specify an Output Path.",
+    "Deutsch": "Bitte geben Sie einen Ausgabepfad an."
+  },
+  "btn_generate": {
+    "English": "Generate",
+    "Deutsch": "Generieren"
+  },
+  "Please wait message": {
+    "English": "Please wait...",
+    "Deutsch": "Warten Sie mal..."
+  },
+  "Overwrite LOD Textures prompt title": {
+    "English": "Overwrite LOD textures?",
+    "Deutsch": "LOD-Texturen überschreiben?"
+  },
+  "Overwrite LOD Textures prompt message": {
+    "English": "Are you sure you want to overwrite the LOD textures directly? If not, click no and specify a custom Output Path.",
+    "Deutsch": "Möchten Sie die LOD-Texturen wirklich direkt überschreiben? Wenn nicht, klicken Sie auf Nein und geben Sie einen benutzerdefinierten Ausgabepfad an."
+  },
+  "Successful completion message": {
+    "English": "All Done!",
+    "Deutsch": "Alles erledigt!"
+  },
+  "Unsuccessful completion message": {
+    "English": "There was an error generating roads. Process did not complete successfully.",
+    "Deutsch": "Beim Generieren von Straßen ist ein Fehler aufgetreten. Der Vorgang wurde nicht erfolgreich abgeschlossen."
+  }
+}
