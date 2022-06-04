@@ -108,6 +108,8 @@ class World:
         #Finds all the textures in the worldspace
         self.textures = [fp.replace(path_to_lod32, '') for fp in glob(escape(path_to_lod32) + '*.dds')]
         sm(f'textures at {worldspace}: {self.textures}')
+        if self.textures == []:
+            raise NoLodError(worldspace)
 
         #Finds all covered coordinates
         coordinates = []
@@ -118,6 +120,12 @@ class World:
                 coordinates.append(xy)
         self.lod_coordinates = coordinates
         sm(f'coordinates: {coordinates}')
+
+class NoLodError(Exception):
+    """Exception to raise when no lod is found for processing."""
+    def __init__(self, worldspace):
+        self.message = text['no lod32 textures found for worldspace message'][language.get()] + worldspace + '.'
+        super().__init__(self.message)
 
 def smart_image_open(texture):
     #First attempt to open the texture
@@ -188,15 +196,22 @@ def generate(worldspaces, output_path, lod_path, texconv):
     for n in range(len(worldspaces)):
         if not exists(f'{output_path}\\textures\\terrain\\{worldspaces[n]}'):
             makedirs(f'{output_path}\\textures\\terrain\\{worldspaces[n]}')
-        world_dict[f'{n} world'] = World(lod_path, worldspaces[n])
+        try:
+            world_dict[f'{n} world'] = World(lod_path, worldspaces[n])
+        except NoLodError as nle:
+            sm(f'Error: {nle}', 1)
+            progress_bar.stop()
+            return text['Unsuccessful completion message'][language.get()]
         for coordinates in world_dict[f'{n} world'].lod_coordinates:
             try:
                 world_dict[f'{n} lod'] = Lod(lod_path, worldspaces[n], coordinates)
             except AttributeError as ae:
                 sm(f'Error: AttributeError processing {worldspaces[n]} at {coordinates}. {ae}', 1)
+                progress_bar.stop()
                 return text['Unsuccessful completion message'][language.get()]
             except FileNotFoundError as fnfe:
                 sm(f'Error: FileNotFoundError processing {worldspaces[n]} at {coordinates}. {fnfe}', 1)
+                progress_bar.stop()
                 return text['Unsuccessful completion message'][language.get()]
             for season in world_dict[f'{n} lod'].season_suffixes:
                 if world_dict[f'{n} lod'].road_diffuse_texture:

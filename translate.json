@@ -24,6 +24,10 @@
     "English": "Invalid Path to LOD... Please set the Path to LOD first!",
     "Deutsch": "Ungültiger Pfad zu LOD... Bitte setzen Sie den Pfad zuerst auf LOD!"
   },
+  "no lod32 textures found for worldspace message": {
+    "English": "No LOD32 textures found for ",
+    "Deutsch": "Keine LOD32-Texturen für gefunden "
+  },
   "textures terrain in path prompt title": {
     "English": "Remove \\textures\\terrain from selected path?",
     "Deutsch": "\\textures\\terrain vom ausgewählten Pfad entfernen?"
