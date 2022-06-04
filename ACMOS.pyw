@@ -10,7 +10,7 @@ from tkinter.filedialog import askdirectory
 from os import listdir, makedirs, remove, strerror
 from os.path import exists, isdir, join, split
 from shutil import make_archive, move
-from glob import glob
+from glob import glob, escape
 from subprocess import check_call, CalledProcessError
 from datetime import datetime
 
@@ -69,7 +69,7 @@ class Lod(Road):
         sm(f'Processing {self.texture}')
         self.road = f'roads\\{worldspace}\\{worldspace}.32.{lod_position}'
         #return a list of seasons found for the current position
-        self.season_suffixes = [fp.replace(self.texture, '').replace('_n.dds', '') for fp in glob(f'{self.texture}*_n.dds')]
+        self.season_suffixes = [fp.replace(self.texture, '').replace('_n.dds', '') for fp in glob(escape(self.texture) + '*_n.dds')]
         sm(f'seasons are {self.season_suffixes}',0,0)
         if '' not in self.season_suffixes:
             sm(f'No default LOD exists for {worldspace} at {lod_position}. Please generate xLODGen with correct settings.', 1)
@@ -106,7 +106,7 @@ class World:
         path_to_lod32 = f'{lod_path}\\textures\\terrain\\{worldspace}\\{worldspace}.32.'
 
         #Finds all the textures in the worldspace
-        self.textures = [fp.replace(path_to_lod32, '') for fp in glob(f'{path_to_lod32}*.dds')]
+        self.textures = [fp.replace(path_to_lod32, '') for fp in glob(escape(path_to_lod32) + '*.dds')]
         sm(f'textures at {worldspace}: {self.textures}')
 
         #Finds all covered coordinates
