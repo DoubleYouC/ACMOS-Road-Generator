@@ -354,7 +354,9 @@ if __name__ == '__main__':
 
     #Create base app window
     window = tk.Tk()
-    window.iconbitmap(default='Icon.ico')
+    icon = tk.PhotoImage(file='Icon.gif')
+    window.tk.call('wm','iconphoto',window._w, icon)
+
     window.wm_title('Language')
     window.minsize(500, 100)
 
