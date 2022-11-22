@@ -4,6 +4,10 @@
     "English": "ACMOS Road Generator",
     "Deutsch": "ACMOS Straßengenerator"
   },
+  "lbl_roads_label": {
+    "English": "Select Roads:",
+    "Deutsch": "Straßen auswählen:"
+  },
   "lbl_lod_path_label": {
     "English": "Path to LOD:",
     "Deutsch": "Weg nach LOD:"

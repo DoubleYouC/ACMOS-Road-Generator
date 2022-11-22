@@ -29,7 +29,7 @@ class Road:
         if exists(f'{road}_d.png'):
             road_diffuse_mask_texture = smart_image_open(f'{self.road}_d.png').convert('RGBA')
         else:
-            road_diffuse_mask_texture = smart_image_open('roads\\white.png').convert('RGBA')
+            road_diffuse_mask_texture = smart_image_open('white.png').convert('RGBA')
             sm(f'Road diffuse mask texture does not exist for {texture}. Using default white mask.',0,0)
         self.road_diffuse_mask_texture = road_diffuse_mask_texture.resize(diffuse_size, Image.LANCZOS)
         #Import any existing road normal.
@@ -43,7 +43,7 @@ class Road:
         if exists(f'{road}_m.png'):
             road_normal_mask_texture = smart_image_open(f'{road}_m.png').convert('RGBA')
         else:
-            road_normal_mask_texture = smart_image_open('roads\\white.png').convert('RGBA')
+            road_normal_mask_texture = smart_image_open('white.png').convert('RGBA')
             sm(f'Road normal mask texture does not exist for {texture}. Using default white mask.',0,0)
         self.road_normal_mask_texture = road_normal_mask_texture.resize(normal_size, Image.LANCZOS)
 
@@ -64,10 +64,10 @@ class Road:
         return new_normal_texture
 
 class Lod(Road):
-    def __init__(self, lod_path, worldspace, lod_position):
+    def __init__(self, road_path, lod_path, worldspace, lod_position):
         self.texture = f'{lod_path}\\textures\\terrain\\{worldspace}\\{worldspace}.32.{lod_position}'
         sm(f'Processing {self.texture}')
-        self.road = f'roads\\{worldspace}\\{worldspace}.32.{lod_position}'
+        self.road = f'{road_path}\\{worldspace}\\{worldspace}.32.{lod_position}'
         #return a list of seasons found for the current position
         self.season_suffixes = [fp.replace(self.texture, '').replace('_n.dds', '') for fp in glob(escape(self.texture) + '*_n.dds')]
         sm(f'seasons are {self.season_suffixes}',0,0)
@@ -189,7 +189,7 @@ def read_texconv(input_file):
     except CalledProcessError as ex:
         sm("Error: " + str(ex), 1)
 
-def generate(worldspaces, output_path, lod_path, texconv):
+def generate(worldspaces, road_path, output_path, lod_path, texconv):
     #Generate roads
     world_dict = {}
     progress_bar.start()
@@ -204,7 +204,7 @@ def generate(worldspaces, output_path, lod_path, texconv):
             return text['Unsuccessful completion message'][language.get()]
         for coordinates in world_dict[f'{n} world'].lod_coordinates:
             try:
-                world_dict[f'{n} lod'] = Lod(lod_path, worldspaces[n], coordinates)
+                world_dict[f'{n} lod'] = Lod(road_path, lod_path, worldspaces[n], coordinates)
             except AttributeError as ae:
                 sm(f'Error: AttributeError processing {worldspaces[n]} at {coordinates}. {ae}', 1)
                 progress_bar.stop()
@@ -299,7 +299,7 @@ def generate_button():
     lod_path_terrain = f'{lod_path}\\textures\\terrain'
     sm(f'LOD Path set to {lod_path}')
     if exists(lod_path) and exists(lod_path_terrain):
-        road_path = 'roads'
+        road_path = 'roads\\' + road_selection.get()
         sm(f'Road Path set to {road_path}')
         output_path = btn_output_path['text'].replace('/','\\')
         sm(f'Output Path set to {output_path}')
@@ -314,7 +314,7 @@ def generate_button():
         #worldspaces = ['blackreach']
         ############################
         
-        message = generate(worldspaces, output_path, lod_path, texconv)
+        message = generate(worldspaces, road_path, output_path, lod_path, texconv)
         #send all done message
         sm(message)
         btn_generate['text'] = text['btn_generate'][language.get()]
@@ -328,6 +328,7 @@ def change_language(lingo):
     #Language handling
     sm(f'Using {lingo}.', update_status = False)
     window.wm_title(text['title'][language.get()])
+    lbl_roads_label['text'] = text['lbl_roads_label'][language.get()]
     lbl_lod_path_label['text'] = text['lbl_lod_path_label'][language.get()]
     btn_lod_path['text'] = text['btn_lod_path'][language.get()]
     lbl_output_path_label['text'] = text['lbl_output_path_label'][language.get()]
@@ -357,10 +358,11 @@ if __name__ == '__main__':
     icon = tk.PhotoImage(file='Icon.gif')
     window.tk.call('wm','iconphoto',window._w, icon)
 
-    window.wm_title('Language')
+    window.wm_title('ACMOS Road Generator')
     window.minsize(500, 100)
 
-    #Three frames on top of each other to place widgets in
+    #Four frames on top of each other to place widgets in
+    frame_roads = tk.Frame(window)
     frame_lod = tk.Frame(window)
     frame_output = tk.Frame(window)
     frame_generate = tk.Frame(window)
@@ -371,6 +373,15 @@ if __name__ == '__main__':
     language.set(text['languages'][0])
     optm_language = ttk.OptionMenu(window, language, text['languages'][0], *text['languages'], command=change_language)
     optm_language.pack(padx=5, pady=5)
+
+    #Road selection dropdown
+    lbl_roads_label = tk.Label(frame_roads, text=text['lbl_roads_label'][language.get()])
+    lbl_roads_label.pack(anchor=tk.NW, padx=5, pady=10, side=tk.LEFT)
+    road_dirs = listdir(f'roads')
+    road_selection = tk.StringVar(window)
+    road_selection.set(road_dirs[0])
+    optm_roads = ttk.OptionMenu(frame_roads, road_selection, road_dirs[0], *road_dirs)
+    optm_roads.pack(anchor=tk.NW, padx=5, pady=9)
 
     #LOD Path widgets
     lbl_lod_path_label = tk.Label(frame_lod, text=text['lbl_lod_path_label'][language.get()])
@@ -397,6 +408,7 @@ if __name__ == '__main__':
     progress_bar.pack(side=tk.BOTTOM, padx=3, fill=tk.X)
 
     #Pack frames
+    frame_roads.pack()
     frame_lod.pack()
     frame_output.pack()
     frame_generate.pack(expand=True, fill=tk.X)
