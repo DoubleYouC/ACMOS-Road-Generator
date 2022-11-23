@@ -21,7 +21,7 @@ class Road:
         #Import any existing road diffuse.
         if exists(f'{road}.png'):
             road_diffuse_texture = smart_image_open(f'{road}.png').convert('RGBA')
-            self.road_diffuse_texture = road_diffuse_texture.resize(diffuse_size, Image.LANCZOS)
+            self.road_diffuse_texture = road_diffuse_texture.resize(diffuse_size, Image.Resampling.LANCZOS)
         else:
             self.road_diffuse_texture = None
             sm(f'Road diffuse texture does not exist for {texture}',0,0)
@@ -31,11 +31,11 @@ class Road:
         else:
             road_diffuse_mask_texture = smart_image_open('white.png').convert('RGBA')
             sm(f'Road diffuse mask texture does not exist for {texture}. Using default white mask.',0,0)
-        self.road_diffuse_mask_texture = road_diffuse_mask_texture.resize(diffuse_size, Image.LANCZOS)
+        self.road_diffuse_mask_texture = road_diffuse_mask_texture.resize(diffuse_size, Image.Resampling.LANCZOS)
         #Import any existing road normal.
         if exists(f'{road}_n.png'):
             road_normal_texture = smart_image_open(f'{road}_n.png').convert('RGBA')
-            self.road_normal_texture = road_normal_texture.resize(normal_size, Image.LANCZOS)
+            self.road_normal_texture = road_normal_texture.resize(normal_size, Image.Resampling.LANCZOS)
         else:
             self.road_normal_texture = None
             sm(f'Road normal texture does not exist for {texture}.',0,0)
@@ -45,7 +45,7 @@ class Road:
         else:
             road_normal_mask_texture = smart_image_open('white.png').convert('RGBA')
             sm(f'Road normal mask texture does not exist for {texture}. Using default white mask.',0,0)
-        self.road_normal_mask_texture = road_normal_mask_texture.resize(normal_size, Image.LANCZOS)
+        self.road_normal_mask_texture = road_normal_mask_texture.resize(normal_size, Image.Resampling.LANCZOS)
 
     def new_diffuse(self, original_diffuse):
         new_diffuse_texture = Image.composite(original_diffuse,
@@ -80,25 +80,25 @@ class Lod(Road):
         self.diffuse_texture = smart_image_open(f'{self.texture}{self.season_suffixes[0]}.dds').convert('RGBA')
         if self.diffuse_texture.size[0] < 1024:
             sm(f'{self.texture}{self.season_suffixes[0]}.dds was smaller than 1024 resolution, so it will be upscaled.',0,0)
-            self.diffuse_texture = self.diffuse_texture.resize((1024, 1024), Image.LANCZOS)
+            self.diffuse_texture = self.diffuse_texture.resize((1024, 1024), Image.Resampling.LANCZOS)
 
         self.normal_texture = smart_image_open(f'{self.texture}{self.season_suffixes[0]}_n.dds').convert('RGBA')
         if self.normal_texture.size[0] < 1024:
             sm(f'{self.texture}{self.season_suffixes[0]}_n.dds was smaller than 1024 resolution, so it will be upscaled.',0,0)
-            self.normal_texture = self.normal_texture.resize((1024, 1024), Image.LANCZOS)
+            self.normal_texture = self.normal_texture.resize((1024, 1024), Image.Resampling.LANCZOS)
 
         Road.__init__(self, self.texture, self.road, self.diffuse_texture.size, self.normal_texture.size)
 
     def seasonal_diffuse(self, season_suffix):
         seasonal_diffuse_image = smart_image_open(f'{self.texture}{season_suffix}.dds').convert('RGBA')
         if seasonal_diffuse_image.size[0] < 1024:
-            seasonal_diffuse_image = seasonal_diffuse_image.resize((1024, 1024), Image.LANCZOS)
+            seasonal_diffuse_image = seasonal_diffuse_image.resize((1024, 1024), Image.Resampling.LANCZOS)
         return seasonal_diffuse_image
 
     def seasonal_normal(self, season_suffix):
         seasonal_normal_image = smart_image_open(f'{self.texture}{season_suffix}_n.dds').convert('RGBA')
         if seasonal_normal_image.size[0] < 1024:
-            seasonal_normal_image = seasonal_normal_image.resize((1024, 1024), Image.LANCZOS)
+            seasonal_normal_image = seasonal_normal_image.resize((1024, 1024), Image.Resampling.LANCZOS)
         return seasonal_normal_image
 
 class World:
