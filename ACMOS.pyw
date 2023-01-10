@@ -6,6 +6,7 @@ import logging
 import errno
 
 from tkinter import ttk
+from tkinter import messagebox
 from tkinter.filedialog import askdirectory
 from os import listdir, makedirs, remove, strerror
 from os.path import exists, isdir, join, split
@@ -160,7 +161,7 @@ def sm(message, error_message = False, update_status = True):
     #My standard Error message, statusbar update, and logging function
     logging.info(message)
     if error_message:
-        tk.messagebox.showerror('Error', message)
+        messagebox.showerror('Error', message)
     if update_status:
         statusbar['text'] = message
     window.update()
@@ -238,7 +239,7 @@ def generate(worldspaces, road_path, output_path, lod_path, texconv):
             except OSError as ex:
                 sm(f'Error: OSError removing {file}: {ex}')
     sm(text['Zip contents prompt title'][language.get()])
-    answer = tk.messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
+    answer = messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
     if answer:
         sm(f'Please wait... This could take a while... Zipping {output_path} to {output_path}\\Terrain LOD.zip')
         make_archive('Terrain LOD', 'zip', output_path)
@@ -252,7 +253,7 @@ def set_lod_path():
     if directory == '':
         return
     if '/textures/terrain' in directory:
-        answer = tk.messagebox.askyesno(text['textures terrain in path prompt title'][language.get()],text['textures terrain in path prompt message'][language.get()])
+        answer = messagebox.askyesno(text['textures terrain in path prompt title'][language.get()],text['textures terrain in path prompt message'][language.get()])
         if answer:
             directory = directory.replace('/textures/terrain', '')
     btn_lod_path['text'] = directory
@@ -268,7 +269,7 @@ def set_output_path():
     if directory == '':
         return
     if '/textures/terrain' in directory:
-        answer = tk.messagebox.askyesno(text['textures terrain in path prompt title'][language.get()],text['textures terrain in path prompt message'][language.get()])
+        answer = messagebox.askyesno(text['textures terrain in path prompt title'][language.get()],text['textures terrain in path prompt message'][language.get()])
         if answer:
             directory = directory.replace('/textures/terrain', '')
     btn_output_path['text'] = directory
@@ -288,7 +289,7 @@ def generate_button():
         btn_generate['state'] = 'normal'
         return
     if btn_output_path['text'] == btn_lod_path['text']:
-        answer = tk.messagebox.askyesno(text['Overwrite LOD Textures prompt title'][language.get()],text['Overwrite LOD Textures prompt message'][language.get()])
+        answer = messagebox.askyesno(text['Overwrite LOD Textures prompt title'][language.get()],text['Overwrite LOD Textures prompt message'][language.get()])
         if not answer:
             set_output_path()
             btn_generate['state'] = 'normal'
@@ -318,7 +319,7 @@ def generate_button():
         #send all done message
         sm(message)
         btn_generate['text'] = text['btn_generate'][language.get()]
-        tk.messagebox.showinfo(message, message)
+        messagebox.showinfo(message, message)
         btn_generate['state'] = 'normal'
     else:
         sm(text['Invalid LOD path message'][language.get()])
