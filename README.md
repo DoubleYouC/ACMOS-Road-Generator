@@ -5,4 +5,13 @@ Requires Python 3 with Pillow. I use version 3.8 to compile to ensure compatibil
 
 Also requires texconv.exe from DirectXTex: https://github.com/microsoft/DirectXTex. It should be placed in subfolder called texconv, or modify code to point to your custom path.
 
+# CLI arguments
+The follwing CLI arguments are available.
+
+| -l       | LOD Path                                           | `-l:"C:\Path to LOD\xLODGen Output"`  |
+|----------|----------------------------------------------------|---------------------------------------|
+| -o       | Output Path                                        | `-o:"C:\Skyrim Modding\ACMOS Output"` |
+| -t       | Roads Type                                         | `-t:"Roads"` or `-t:"Paths Only"`     |
+| -autorun | Automatically clicks the "Generate" button for you | `-autorun`                            |
+
 CC BY-NC-SA
