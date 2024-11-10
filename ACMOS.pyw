@@ -1,5 +1,6 @@
 '''ACMOS Road Generator'''
 
+import sys
 import tkinter as tk
 import json
 import logging
@@ -375,25 +376,50 @@ if __name__ == '__main__':
     optm_language = ttk.OptionMenu(window, language, text['languages'][0], *text['languages'], command=change_language)
     optm_language.pack(padx=5, pady=5)
 
+    #Get CLI argument for output path
+    out_path_arg = next((s for s in sys.argv if s.startswith("-o:")), None)
+    if out_path_arg == None:
+        out_path_arg = text['btn_output_path'][language.get()]
+    else:
+        out_path_arg = out_path_arg[3:].strip('"\'')
+
+    #Get CLI argument for LOD path
+    lod_path_arg = next((s for s in sys.argv if s.startswith("-l:")), None)
+    if lod_path_arg == None:
+        lod_path_arg = text['btn_lod_path'][language.get()]
+    else:
+        lod_path_arg = lod_path_arg[3:].strip('"\'')
+
     #Road selection dropdown
     lbl_roads_label = tk.Label(frame_roads, text=text['lbl_roads_label'][language.get()])
     lbl_roads_label.pack(anchor=tk.NW, padx=5, pady=10, side=tk.LEFT)
     road_dirs = listdir(f'roads')
+    
+    #Get CLI argument for road selection
+    type_arg = next((s for s in sys.argv if s.startswith("-t:")), None)
+
+    if type_arg != None:
+        type_arg = type_arg[3:].strip('"\'')
+        if road_dirs.index(type_arg) > -1:
+            selected_roads = type_arg
+    else:
+        selected_roads = road_dirs[0]
+
     road_selection = tk.StringVar(window)
     road_selection.set(road_dirs[0])
-    optm_roads = ttk.OptionMenu(frame_roads, road_selection, road_dirs[0], *road_dirs)
+    optm_roads = ttk.OptionMenu(frame_roads, road_selection, selected_roads, *road_dirs)
     optm_roads.pack(anchor=tk.NW, padx=5, pady=9)
-
+    
     #LOD Path widgets
     lbl_lod_path_label = tk.Label(frame_lod, text=text['lbl_lod_path_label'][language.get()])
     lbl_lod_path_label.pack(anchor=tk.NW, padx=5, pady=15, side=tk.LEFT)
-    btn_lod_path = tk.Button(frame_lod, text=text['btn_lod_path'][language.get()], command=set_lod_path)
+    btn_lod_path = tk.Button(frame_lod, text=lod_path_arg, command=set_lod_path)
     btn_lod_path.pack(anchor=tk.NW, padx=5, pady=10)
     
     #Output Path widgets
     lbl_output_path_label = tk.Label(frame_output, text=text['lbl_output_path_label'][language.get()])
     lbl_output_path_label.pack(anchor=tk.NW, padx=5, pady=15, side=tk.LEFT)
-    btn_output_path = tk.Button(frame_output, text=text['btn_output_path'][language.get()], command=set_output_path)
+    btn_output_path = tk.Button(frame_output, text=out_path_arg, command=set_output_path)
     btn_output_path.pack(anchor=tk.NW, padx=5, pady=10)
     
     #Generate button
@@ -414,5 +440,9 @@ if __name__ == '__main__':
     frame_output.pack()
     frame_generate.pack(expand=True, fill=tk.X)
     
-    #Start app
-    window.mainloop()
+    #Get autorun CLI argument
+    if '-autorun' in sys.argv:
+        generate_button()
+    else:
+        #Start app
+        window.mainloop()
