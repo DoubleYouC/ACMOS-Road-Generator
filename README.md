@@ -8,11 +8,11 @@ Also requires texconv.exe from DirectXTex: https://github.com/microsoft/DirectXT
 ## CLI arguments
 The follwing CLI arguments are available.
 
-| Parameter | Description                                        | Example                               |
-|-----------|----------------------------------------------------|---------------------------------------|
-| -l        | LOD Path                                           | `-l:"C:\Path to LOD\xLODGen Output"`  |
-| -o        | Output Path                                        | `-o:"C:\Skyrim Modding\ACMOS Output"` |
-| -t        | Roads Type                                         | `-t:"Roads"` or `-t:"Paths Only"`     |
-| -autorun  | Automatically clicks the "Generate" button for you | `-autorun`                            |
+| Parameter | Description                                        | Example                                                          |
+|-----------|----------------------------------------------------|------------------------------------------------------------------|
+| -l        | LOD Path. Relative paths are supported.            | `-l:"C:\Path to LOD\xLODGen Output"` or `-l:"./xLODGen Output"`  |
+| -o        | Output Path. Relative paths are supported.         | `-o:"C:\Skyrim Modding\ACMOS Output"` or `-o:"./ACMOS Output"`   |
+| -t        | Roads Type                                         | `-t:"Roads"` or `-t:"Paths Only"`                                |
+| -autorun  | Automatically clicks the "Generate" button for you | `-autorun`                                                       |
 
 CC BY-NC-SA

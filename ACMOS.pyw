@@ -10,7 +10,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter.filedialog import askdirectory
 from os import listdir, makedirs, remove, strerror
-from os.path import exists, isdir, join, split
+from os.path import exists, isdir, join, split, abspath
 from shutil import make_archive, move
 from glob import glob, escape
 from subprocess import check_call, CalledProcessError
@@ -381,14 +381,14 @@ if __name__ == '__main__':
     if out_path_arg == None:
         out_path_arg = text['btn_output_path'][language.get()]
     else:
-        out_path_arg = out_path_arg[3:].strip('"\'')
+        out_path_arg = abspath(out_path_arg[3:].strip('"\''))
 
     #Get CLI argument for LOD path
     lod_path_arg = next((s for s in sys.argv if s.startswith("-l:")), None)
     if lod_path_arg == None:
         lod_path_arg = text['btn_lod_path'][language.get()]
     else:
-        lod_path_arg = lod_path_arg[3:].strip('"\'')
+        lod_path_arg = abspath(lod_path_arg[3:].strip('"\''))
 
     #Road selection dropdown
     lbl_roads_label = tk.Label(frame_roads, text=text['lbl_roads_label'][language.get()])
