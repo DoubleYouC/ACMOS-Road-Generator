@@ -10,6 +10,7 @@ The follwing CLI arguments are available.
 
 | Parameter                  | Description                                                                  | Example                                                          |
 |----------------------------|------------------------------------------------------------------------------|------------------------------------------------------------------|
+| -zip                       | Zips the output. If not using this or `-autorun`, you will be prompted.      | `-zip`                                                           |
 | -l                         | LOD Path. Relative paths are supported.                                      | `-l:"C:\Path to LOD\xLODGen Output"` or `-l:"./xLODGen Output"`  |
 | -o                         | Output Path. Relative paths are supported.                                   | `-o:"C:\Skyrim Modding\ACMOS Output"` or `-o:"./ACMOS Output"`   |
 | -t                         | Roads Type                                                                   | `-t:"Roads"` or `-t:"Paths Only"`                                |

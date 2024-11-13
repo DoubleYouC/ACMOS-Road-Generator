@@ -244,7 +244,17 @@ def generate(worldspaces, road_path, output_path, lod_path, texconv):
             except OSError as ex:
                 sm(f'Error: OSError removing {file}: {ex}')
     sm(text['Zip contents prompt title'][language.get()])
-    answer = messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
+    
+    if '-zip' in sys.argv:
+        #If -zip argument is provided, zip output
+        answer = True
+    else:
+        if '-autorun' in sys.argv:
+            answer = False #Autorunning and no -zip argument provided. Don't zip
+        else:
+            #Not autorunning, ask the user
+            answer = messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
+    
     if answer:
         sm(f'Please wait... This could take a while... Zipping {output_path} to {output_path}\\Terrain LOD.zip')
         make_archive('Terrain LOD', 'zip', output_path)
@@ -324,7 +334,10 @@ def generate_button():
         #send all done message
         sm(message)
         btn_generate['text'] = text['btn_generate'][language.get()]
-        messagebox.showinfo(message, message)
+
+        #Show all done message, if not auto-running.
+        if '-autorun' not in sys.argv:
+            messagebox.showinfo(message, message)
         btn_generate['state'] = 'normal'
     else:
         sm(text['Invalid LOD path message'][language.get()])
