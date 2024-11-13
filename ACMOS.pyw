@@ -193,7 +193,7 @@ def read_texconv(input_file):
 
 def generate(worldspaces, road_path, output_path, lod_path, texconv):
     #Clear output directory, if argument is given
-    if '-clear-output-on-generate' in sys.argv:
+    if '-clear-output-on-generate' in sys.argv and exists(output_path):
         rmtree(output_path)
 
     #Generate roads
