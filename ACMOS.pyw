@@ -11,7 +11,7 @@ from tkinter import messagebox
 from tkinter.filedialog import askdirectory
 from os import listdir, makedirs, remove, strerror
 from os.path import exists, isdir, join, split, abspath
-from shutil import make_archive, move
+from shutil import make_archive, move, rmtree
 from glob import glob, escape
 from subprocess import check_call, CalledProcessError
 from datetime import datetime
@@ -192,6 +192,10 @@ def read_texconv(input_file):
         sm("Error: " + str(ex), 1)
 
 def generate(worldspaces, road_path, output_path, lod_path, texconv):
+    #Clear output directory, if argument is given
+    if '-clear-output-on-generate' in sys.argv:
+        rmtree(output_path)
+
     #Generate roads
     world_dict = {}
     progress_bar.start()
