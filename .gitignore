@@ -13,6 +13,7 @@ Build with pyinstaller.bat
 build/
 dist/
 texconv/*
+config.ini
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
