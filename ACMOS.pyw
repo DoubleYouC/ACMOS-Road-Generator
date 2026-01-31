@@ -396,25 +396,31 @@ if __name__ == '__main__':
     optm_language = ttk.OptionMenu(window, language, config['DEFAULT']['language'], *text['languages'], command=change_language)
     optm_language.pack(padx=5, pady=5)
 
+    out_path_arg = config['DEFAULT']['output']
+    lod_path_arg = config['DEFAULT']['lod_path']
+
     #Road selection dropdown
     lbl_roads_label = tk.Label(frame_roads, text=text['lbl_roads_label'][language.get()])
     lbl_roads_label.pack(anchor=tk.NW, padx=5, pady=10, side=tk.LEFT)
     road_dirs = listdir(f'roads')
+
+    selected_roads = config['DEFAULT']['roads']
+
     road_selection = tk.StringVar(window)
     road_selection.set(config['DEFAULT']['roads'])
-    optm_roads = ttk.OptionMenu(frame_roads, road_selection, config['DEFAULT']['roads'], *road_dirs)
+    optm_roads = ttk.OptionMenu(frame_roads, road_selection, selected_roads, *road_dirs)
     optm_roads.pack(anchor=tk.NW, padx=5, pady=9)
 
     #LOD Path widgets
     lbl_lod_path_label = tk.Label(frame_lod, text=text['lbl_lod_path_label'][language.get()])
     lbl_lod_path_label.pack(anchor=tk.NW, padx=5, pady=15, side=tk.LEFT)
-    btn_lod_path = tk.Button(frame_lod, text=config['DEFAULT']['lod_path'], command=set_lod_path)
+    btn_lod_path = tk.Button(frame_lod, text=lod_path_arg, command=set_lod_path)
     btn_lod_path.pack(anchor=tk.NW, padx=5, pady=10)
     
     #Output Path widgets
     lbl_output_path_label = tk.Label(frame_output, text=text['lbl_output_path_label'][language.get()])
     lbl_output_path_label.pack(anchor=tk.NW, padx=5, pady=15, side=tk.LEFT)
-    btn_output_path = tk.Button(frame_output, text=config['DEFAULT']['output'], command=set_output_path)
+    btn_output_path = tk.Button(frame_output, text=out_path_arg, command=set_output_path)
     btn_output_path.pack(anchor=tk.NW, padx=5, pady=10)
     
     #Generate button
