@@ -259,11 +259,12 @@ def set_lod_path():
             directory = directory.replace('/textures/terrain', '')
     btn_lod_path['text'] = directory
     sm(f'LOD Path set to {directory}')
+    config['DEFAULT']['lod_path'] = directory
     btn_generate['text'] = text['btn_generate'][language.get()]
     if btn_output_path['text'] == text['btn_lod_path'][language.get()]:
         btn_output_path['text'] = directory
         sm(f'Output Path set to {directory}')
-    config['DEFAULT']['output'] = directory
+        config['DEFAULT']['output'] = directory
 
 def set_output_path():
     #Sets the Output Path
