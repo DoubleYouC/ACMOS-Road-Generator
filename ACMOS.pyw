@@ -15,6 +15,7 @@ from shutil import make_archive, move, rmtree
 from glob import glob, escape
 from subprocess import check_call, CalledProcessError
 from datetime import datetime
+from configparser import ConfigParser
 
 from PIL import Image, UnidentifiedImageError
 
@@ -273,10 +274,12 @@ def set_lod_path():
             directory = directory.replace('/textures/terrain', '')
     btn_lod_path['text'] = directory
     sm(f'LOD Path set to {directory}')
+    config['DEFAULT']['lod_path'] = directory
     btn_generate['text'] = text['btn_generate'][language.get()]
     if btn_output_path['text'] == text['btn_lod_path'][language.get()]:
         btn_output_path['text'] = directory
         sm(f'Output Path set to {directory}')
+        config['DEFAULT']['output'] = directory
 
 def set_output_path():
     #Sets the Output Path
@@ -288,9 +291,13 @@ def set_output_path():
         if answer:
             directory = directory.replace('/textures/terrain', '')
     btn_output_path['text'] = directory
+    config['DEFAULT']['output'] = directory
     sm(f'Output Path set to {directory}')
 
 def generate_button():
+    #Update configuration file before starting the process
+    config['DEFAULT']['roads'] = road_selection.get()
+    config.write(open(config_file, 'w'))
     #What the generate button does
     btn_generate['state'] = 'disabled'
     if btn_lod_path['text'] == text['btn_lod_path'][language.get()]:
@@ -346,6 +353,8 @@ def generate_button():
 def change_language(lingo):
     #Language handling
     sm(f'Using {lingo}.', update_status = False)
+    config['DEFAULT']['language'] = lingo
+    config.write(open(config_file, 'w'))
     window.wm_title(text['title'][language.get()])
     lbl_roads_label['text'] = text['lbl_roads_label'][language.get()]
     lbl_lod_path_label['text'] = text['lbl_lod_path_label'][language.get()]
@@ -372,6 +381,18 @@ if __name__ == '__main__':
     with open('translate.json', encoding='utf-8') as translate_json:
         text = json.load(translate_json)
 
+    #Remember last used options or create a new config file
+    config_file = 'config.ini'
+    config = ConfigParser()
+    if exists(config_file):
+        config.read_file(open(config_file))
+    else:
+        config['DEFAULT'] = {'language': text['languages'][0],
+                             'roads': listdir('roads')[0],
+                             'lod_path': text['btn_lod_path'][text['languages'][0]],
+                             'output': text['btn_output_path'][text['languages'][0]]}
+        config.write(open(config_file, 'x'))
+
     #Create base app window
     window = tk.Tk()
     icon = tk.PhotoImage(file='Icon.gif')
@@ -389,21 +410,21 @@ if __name__ == '__main__':
     #Language dropdown
     options = text['languages']
     language = tk.StringVar(window)
-    language.set(text['languages'][0])
-    optm_language = ttk.OptionMenu(window, language, text['languages'][0], *text['languages'], command=change_language)
+    language.set(config['DEFAULT']['language'])
+    optm_language = ttk.OptionMenu(window, language, config['DEFAULT']['language'], *text['languages'], command=change_language)
     optm_language.pack(padx=5, pady=5)
 
     #Get CLI argument for output path
     out_path_arg = next((s for s in sys.argv if s.startswith("-o:")), None)
     if out_path_arg == None:
-        out_path_arg = text['btn_output_path'][language.get()]
+        out_path_arg = config['DEFAULT']['output']
     else:
         out_path_arg = abspath(out_path_arg[3:].strip('"\''))
 
     #Get CLI argument for LOD path
     lod_path_arg = next((s for s in sys.argv if s.startswith("-l:")), None)
     if lod_path_arg == None:
-        lod_path_arg = text['btn_lod_path'][language.get()]
+        lod_path_arg = config['DEFAULT']['lod_path']
     else:
         lod_path_arg = abspath(lod_path_arg[3:].strip('"\''))
 
@@ -420,10 +441,10 @@ if __name__ == '__main__':
         if road_dirs.index(type_arg) > -1:
             selected_roads = type_arg
     else:
-        selected_roads = road_dirs[0]
+        selected_roads = config['DEFAULT']['roads']
 
     road_selection = tk.StringVar(window)
-    road_selection.set(road_dirs[0])
+    road_selection.set(selected_roads)
     optm_roads = ttk.OptionMenu(frame_roads, road_selection, selected_roads, *road_dirs)
     optm_roads.pack(anchor=tk.NW, padx=5, pady=9)
     
