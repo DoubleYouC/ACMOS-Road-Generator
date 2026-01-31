@@ -23,7 +23,10 @@
     <Compile Include="ACMOS.pyw" />
   </ItemGroup>
   <ItemGroup>
+	<Content Include="ACMOS_onefile.spec" />
     <Content Include="Icon.ico" />
+	<Content Include="Icon.gif" />
+	<Content Include="README.md" />
     <Content Include="requirements.txt" />
     <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.-32.-32.png" />
     <Content Include="roads\arnimaduplicate003\arnimaduplicate003.32.-32.-32_n.png" />
@@ -105,7 +108,7 @@
     <Content Include="roads\vominheim\vominheim.32.0.-32_n.png" />
     <Content Include="roads\vominheim\vominheim.32.0.0.png" />
     <Content Include="roads\vominheim\vominheim.32.0.0_n.png" />
-    <Content Include="roads\white.png" />
+    <Content Include="white.png" />
     <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.-32.-32.png" />
     <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.-32.-32_n.png" />
     <Content Include="roads\wyrmstoothworld\wyrmstoothworld.32.-32.0.png" />
