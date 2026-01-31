@@ -1,5 +1,6 @@
 '''ACMOS Road Generator'''
 
+import sys
 import tkinter as tk
 import json
 import logging
@@ -9,8 +10,8 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter.filedialog import askdirectory
 from os import listdir, makedirs, remove, strerror
-from os.path import exists, isdir, join, split
-from shutil import make_archive, move
+from os.path import exists, isdir, join, split, abspath
+from shutil import make_archive, move, rmtree
 from glob import glob, escape
 from subprocess import check_call, CalledProcessError
 from datetime import datetime
@@ -192,6 +193,10 @@ def read_texconv(input_file):
         sm("Error: " + str(ex), 1)
 
 def generate(worldspaces, road_path, output_path, lod_path, texconv):
+    #Clear output directory, if argument is given
+    if '-clear-output-on-generate' in sys.argv and exists(output_path):
+        rmtree(output_path)
+
     #Generate roads
     world_dict = {}
     progress_bar.start()
@@ -240,7 +245,17 @@ def generate(worldspaces, road_path, output_path, lod_path, texconv):
             except OSError as ex:
                 sm(f'Error: OSError removing {file}: {ex}')
     sm(text['Zip contents prompt title'][language.get()])
-    answer = messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
+    
+    if '-zip' in sys.argv:
+        #If -zip argument is provided, zip output
+        answer = True
+    else:
+        if '-autorun' in sys.argv:
+            answer = False #Autorunning and no -zip argument provided. Don't zip
+        else:
+            #Not autorunning, ask the user
+            answer = messagebox.askyesno(text['Zip contents prompt title'][language.get()],text['Zip contents prompt message'][language.get()])
+    
     if answer:
         sm(f'Please wait... This could take a while... Zipping {output_path} to {output_path}\\Terrain LOD.zip')
         make_archive('Terrain LOD', 'zip', output_path)
@@ -326,7 +341,10 @@ def generate_button():
         #send all done message
         sm(message)
         btn_generate['text'] = text['btn_generate'][language.get()]
-        messagebox.showinfo(message, message)
+
+        #Show all done message, if not auto-running.
+        if '-autorun' not in sys.argv:
+            messagebox.showinfo(message, message)
         btn_generate['state'] = 'normal'
     else:
         sm(text['Invalid LOD path message'][language.get()])
@@ -396,21 +414,40 @@ if __name__ == '__main__':
     optm_language = ttk.OptionMenu(window, language, config['DEFAULT']['language'], *text['languages'], command=change_language)
     optm_language.pack(padx=5, pady=5)
 
-    out_path_arg = config['DEFAULT']['output']
-    lod_path_arg = config['DEFAULT']['lod_path']
+    #Get CLI argument for output path
+    out_path_arg = next((s for s in sys.argv if s.startswith("-o:")), None)
+    if out_path_arg == None:
+        out_path_arg = config['DEFAULT']['output']
+    else:
+        out_path_arg = abspath(out_path_arg[3:].strip('"\''))
+
+    #Get CLI argument for LOD path
+    lod_path_arg = next((s for s in sys.argv if s.startswith("-l:")), None)
+    if lod_path_arg == None:
+        lod_path_arg = config['DEFAULT']['lod_path']
+    else:
+        lod_path_arg = abspath(lod_path_arg[3:].strip('"\''))
 
     #Road selection dropdown
     lbl_roads_label = tk.Label(frame_roads, text=text['lbl_roads_label'][language.get()])
     lbl_roads_label.pack(anchor=tk.NW, padx=5, pady=10, side=tk.LEFT)
     road_dirs = listdir(f'roads')
+    
+    #Get CLI argument for road selection
+    type_arg = next((s for s in sys.argv if s.startswith("-t:")), None)
 
-    selected_roads = config['DEFAULT']['roads']
+    if type_arg != None:
+        type_arg = type_arg[3:].strip('"\'')
+        if road_dirs.index(type_arg) > -1:
+            selected_roads = type_arg
+    else:
+        selected_roads = config['DEFAULT']['roads']
 
     road_selection = tk.StringVar(window)
-    road_selection.set(config['DEFAULT']['roads'])
+    road_selection.set(selected_roads)
     optm_roads = ttk.OptionMenu(frame_roads, road_selection, selected_roads, *road_dirs)
     optm_roads.pack(anchor=tk.NW, padx=5, pady=9)
-
+    
     #LOD Path widgets
     lbl_lod_path_label = tk.Label(frame_lod, text=text['lbl_lod_path_label'][language.get()])
     lbl_lod_path_label.pack(anchor=tk.NW, padx=5, pady=15, side=tk.LEFT)
@@ -441,5 +478,9 @@ if __name__ == '__main__':
     frame_output.pack()
     frame_generate.pack(expand=True, fill=tk.X)
     
-    #Start app
-    window.mainloop()
+    #Get autorun CLI argument
+    if '-autorun' in sys.argv:
+        generate_button()
+    else:
+        #Start app
+        window.mainloop()
