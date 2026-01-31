@@ -1,91 +1,113 @@
 {
-  "languages": [ "English", "Deutsch" ],
+  "languages": [ "English", "Deutsch", "Italiano" ],
   "title": {
     "English": "ACMOS Road Generator",
-    "Deutsch": "ACMOS Straßengenerator"
+    "Deutsch": "ACMOS Straßengenerator",
+    "Italiano": "ACMOS Generatore di strade"
   },
   "lbl_roads_label": {
     "English": "Select Roads:",
-    "Deutsch": "Straßen auswählen:"
+    "Deutsch": "Straßen auswählen:",
+    "Italiano": "Seleziona le strade:"
   },
   "lbl_lod_path_label": {
     "English": "Path to LOD:",
-    "Deutsch": "Weg nach LOD:"
+    "Deutsch": "Weg nach LOD:",
+    "Italiano": "Percorso del LOD"
   },
   "btn_lod_path": {
     "English": "Browse...",
-    "Deutsch": "Durchsuche..."
+    "Deutsch": "Durchsuche...",
+    "Italiano": "Sfoglia..."
   },
   "Select LOD Path window": {
     "English": "Please select the folder containing the unmodified terrain LOD...",
-    "Deutsch": "Bitte wählen Sie den Ordner mit dem unveränderten Gelände aus..."
+    "Deutsch": "Bitte wählen Sie den Ordner mit dem unveränderten Gelände aus...",
+    "Italiano": "Seleziona la cartella contenente il LOD del terreno senza modifiche..."
   },
   "LOD path not set message": {
     "English": "Please specify an LOD Path.",
-    "Deutsch": "Bitte geben Sie einen LOD-Pfad an."
+    "Deutsch": "Bitte geben Sie einen LOD-Pfad an.",
+    "Italiano": "Specifica il percorso del LOD..."
   },
   "Invalid LOD path message": {
     "English": "Invalid Path to LOD... Please set the Path to LOD first!",
-    "Deutsch": "Ungültiger Pfad zu LOD... Bitte setzen Sie den Pfad zuerst auf LOD!"
+    "Deutsch": "Ungültiger Pfad zu LOD... Bitte setzen Sie den Pfad zuerst auf LOD!",
+    "Italiano": "Percorso del LOD non valido... Imposta il percorso del LOD prima!"
   },
   "no lod32 textures found for worldspace message": {
     "English": "No LOD32 textures found for ",
-    "Deutsch": "Keine LOD32-Texturen für gefunden "
+    "Deutsch": "Keine LOD32-Texturen für gefunden ",
+    "Italiano": "Nessuna texture LOD32 trovata per "
   },
   "textures terrain in path prompt title": {
     "English": "Remove \\textures\\terrain from selected path?",
-    "Deutsch": "\\textures\\terrain vom ausgewählten Pfad entfernen?"
+    "Deutsch": "\\textures\\terrain vom ausgewählten Pfad entfernen?",
+    "Italiano": "Rimuovere \\textures\\terrain dal percorso selezionato?"
   },
   "textures terrain in path prompt message": {
     "English": "The path has \\textures\\terrain in it. This path structure is assumed for terrain LOD and should be omitted. I can automatically correct this for you. Accept this correction?",
-    "Deutsch": "Der Pfad enthält \\textures\\terrain. Diese Pfadstruktur wird für die Terrain-LOD angenommen und sollte weggelassen werden. Ich kann dies automatisch für Sie korrigieren. Akzeptieren Sie diese Korrektur?"
+    "Deutsch": "Der Pfad enthält \\textures\\terrain. Diese Pfadstruktur wird für die Terrain-LOD angenommen und sollte weggelassen werden. Ich kann dies automatisch für Sie korrigieren. Akzeptieren Sie diese Korrektur?",
+    "Italiano": "Nel percorso è presente \\textures\\terrain. Questa struttura del percorso appartiene al LOD del terreno e dovrebbe essere omessa. Consenti la correzione automatica?"
   },
   "lbl_output_path_label": {
     "English": "Output Path:",
-    "Deutsch": "Ausgangspfad:"
+    "Deutsch": "Ausgangspfad:",
+    "Italiano": "Percorso di output:"
   },
   "btn_output_path": {
     "English": "Browse...",
-    "Deutsch": "Durchsuche..."
+    "Deutsch": "Durchsuche...",
+    "Italiano": "Sfoglia..."
   },
   "Select Output Path window": {
     "English": "Please choose an Output folder...",
-    "Deutsch": "Bitte wählen Sie einen Ausgabeordner..."
+    "Deutsch": "Bitte wählen Sie einen Ausgabeordner...",
+    "Italiano": "Seleziona una cartella di output..."
   },
   "Output path not set message": {
     "English": "Please specify an Output Path.",
-    "Deutsch": "Bitte geben Sie einen Ausgabepfad an."
+    "Deutsch": "Bitte geben Sie einen Ausgabepfad an.",
+    "Italiano": "Specifica il percorso di output..."
   },
   "btn_generate": {
     "English": "Generate",
-    "Deutsch": "Generieren"
+    "Deutsch": "Generieren",
+    "Italiano": "Genera"
   },
   "Please wait message": {
     "English": "Please wait...",
-    "Deutsch": "Warten Sie mal..."
+    "Deutsch": "Warten Sie mal...",
+    "Italiano": "Attendere prego..."
   },
   "Overwrite LOD Textures prompt title": {
     "English": "Overwrite LOD textures?",
-    "Deutsch": "LOD-Texturen überschreiben?"
+    "Deutsch": "LOD-Texturen überschreiben?",
+    "Italiano": "Sovrascrivere le texture del LOD?"
   },
   "Overwrite LOD Textures prompt message": {
     "English": "Are you sure you want to overwrite the LOD textures directly? If not, click no and specify a custom Output Path.",
-    "Deutsch": "Möchten Sie die LOD-Texturen wirklich direkt überschreiben? Wenn nicht, klicken Sie auf Nein und geben Sie einen benutzerdefinierten Ausgabepfad an."
+    "Deutsch": "Möchten Sie die LOD-Texturen wirklich direkt überschreiben? Wenn nicht, klicken Sie auf Nein und geben Sie einen benutzerdefinierten Ausgabepfad an.",
+    "Italiano": "Sicuro di voler sovrascrivere le texture del LOD direttamente? Altrimenti specifica un percorso di output personalizzato."
   },
   "Zip contents prompt title": {
     "English": "Zip?",
-    "Deutsch": "Kompresse?"
+    "Deutsch": "Kompresse?",
+    "Italiano": "Comprimere?"
   },
   "Zip contents prompt message": {
     "English": "Generation complete. Would you like to zip the output for ease of installation?",
-    "Deutsch": "Generierung abgeschlossen. Möchten Sie die Ausgabe zur einfacheren Installation komprimieren?"
+    "Deutsch": "Generierung abgeschlossen. Möchten Sie die Ausgabe zur einfacheren Installation komprimieren?",
+    "Italiano": "Generazione completata. Comprimere in un file .zip l'output per semplificare l'installazione?"
   },
   "Successful completion message": {
     "English": "All Done!",
-    "Deutsch": "Alles erledigt!"
+    "Deutsch": "Alles erledigt!",
+    "Italiano": "Processo completato con successo!"
   },
   "Unsuccessful completion message": {
     "English": "There was an error generating roads. Process did not complete successfully.",
-    "Deutsch": "Beim Generieren von Straßen ist ein Fehler aufgetreten. Der Vorgang wurde nicht erfolgreich abgeschlossen."
+    "Deutsch": "Beim Generieren von Straßen ist ein Fehler aufgetreten. Der Vorgang wurde nicht erfolgreich abgeschlossen.",
+    "Italiano": "Errore durante la generazione. Il processo non è stato completato con successo."
   }
 }
