@@ -6,7 +6,7 @@ Requires Python 3 with Pillow. I use version 3.8 to compile to ensure compatibil
 Also requires texconv.exe from DirectXTex: https://github.com/microsoft/DirectXTex. It should be placed in subfolder called texconv, or modify code to point to your custom path.
 
 ## CLI arguments
-The follwing CLI arguments are available.
+The following CLI arguments are available.
 
 | Parameter                  | Description                                                                  | Example                                                          |
 |----------------------------|------------------------------------------------------------------------------|------------------------------------------------------------------|
